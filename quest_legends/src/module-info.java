@@ -1,0 +1,2 @@
+module quest_legends {
+}
