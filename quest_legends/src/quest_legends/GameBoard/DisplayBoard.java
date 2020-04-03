@@ -121,7 +121,6 @@ public class DisplayBoard implements Color, CellType {
 					return monster;
 				}
 			}
-
 			return new Monster("", 2, 12, 12, 12);
 
 		}

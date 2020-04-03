@@ -97,7 +97,7 @@ public class InputHandler {
 		}
 		return c;
 	}
-
+	
 	/*
 	 * Returns Character input if exists in given character list
 	 */

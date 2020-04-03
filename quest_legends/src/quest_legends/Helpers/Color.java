@@ -22,7 +22,6 @@ public interface Color {
 	public static final String PURPLE = "\u001B[34m";
 	public static final String CYAN = "\u001B[36m";
 	public static final String WHITE = "\u001B[37m";
-	
 	public static final String BLUE = "\033[0;94m";
 	
 	public static final String WHITE_ON_BLACK_BACKGROUND = "\u001B[40m";
@@ -37,5 +36,4 @@ public interface Color {
 	
 	public static final String WHITE_LINES = "\u001B[51m";
 	
-
 }

@@ -41,7 +41,7 @@ public class Quest extends Game implements Color, Vizualization {
 
 
 	public void makeMove() {
-		char[] acceptedInputs = { 'W', 'w', 'A', 'a', 'S', 's', 'D', 'd', 'Q', 'q', 'I', 'i', 'M', 'm', 'B', 'b' };
+		char[] acceptedInputs = { 'W', 'w', 'A', 'a', 'S', 's', 'D', 'd', 'Q', 'q', 'I', 'i', 'M', 'm', 'B', 'b', 'T', 't'};
 		boolean playerMoved = false;
 		while (!playerMoved) {
 			System.out.println(currentPlayer
@@ -76,7 +76,7 @@ public class Quest extends Game implements Color, Vizualization {
 				}
 				break;
 			case 'B':
-				// TODO: Go to Nexus
+				// TODO: Go to Nexus - Market
 			case 'I': // all team heroes information
 				cellType = 'i';
 				break;

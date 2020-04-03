@@ -303,5 +303,22 @@ public class Hero extends QuestCharacter {
 	public String image() {
 		return null;
 	}
-
+	/*
+	handleCell() {
+		if (board[current_row][current_col] == Koulou) {
+		 	increase dexterity
+		 if (board[current_row][current_col] == Cave) {
+		
+	}
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
