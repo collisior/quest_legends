@@ -24,7 +24,6 @@ public class GenericMethods {
 
 	public boolean pathExists(Board board) {
 		int[][] temp = new int[board.rows][board.cols];
-		
 		return false;
 		
 	}

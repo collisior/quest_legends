@@ -15,7 +15,7 @@ public class Player {
 	public int current_row = 0, current_col = 0;
 	private int home_lane = 0;
 	private int id = -1;
-	private int teamId;
+	private Team team;
 	private QuestCharacter hero;
 	public String color;
 	private char[] heroChosen = null;
@@ -56,27 +56,6 @@ public class Player {
 	 */
 	public void setPiece(Piece p) {
 		this.piece = p;
-	}
-
-	/*
-	 * Set this Player's team id
-	 */
-	public void setTeamId(int teamId) {
-		this.teamId = teamId;
-	}
-	
-	/*
-	 * Clear this Player's team id
-	 */
-	public void clearTeamId() {
-		setTeamId(-1);
-	}
-
-	/*
-	 * Retrieve this Player's team id
-	 */
-	public int getTeamId() {
-		return this.teamId;
 	}
 
 	/*
@@ -151,5 +130,19 @@ public class Player {
 
 	public void setHomeLane(int home_lane) {
 		this.home_lane = home_lane;
+	}
+
+
+	public Team getTeam() {
+		return team;
+	}
+
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+	
+	public void clearTeam() {
+		this.team = null;
 	}
 }

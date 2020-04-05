@@ -1,5 +1,8 @@
 package quest_legends.Helpers;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public interface Vizualization {
 	public static final String ONE = 
 			" .----------------. \n" + 
@@ -273,6 +276,9 @@ public interface Vizualization {
 	public static final String ANOTHER_HERO_OCCUPIED_MESSAGE = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n" + RED1
 			+ "   You can't go to this cell! Another Hero is there! Try another move.\n" + RESET1
 			+ "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
+	public static final String BEHIND_MONSTER_MESSAGE = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n" + RED1
+			+ "   You can't pass behind a monster without killing it! Try another move.\n" + RESET1
+			+ "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
 	public static final String BOARD_CELLS_INFO = 
 			"Quest Board Cell Inormation: \n\n" 
 			+ "Non-accessible cell:         Magic Market Cell:          Monster Cell: \n"  
@@ -290,5 +296,51 @@ public interface Vizualization {
 				+GREEN1+"   \\\\\\\\\\\\    "+RESET1+CYAN1+"                  L◻◻◻◻⅃   "+RESET1+PURPLE1+"                  ******" + RESET1;
 		System.out.println(s);		
 	}
-	
+	public static void fightCountdown() {
+		Timer timer = new Timer();
+		int seconds = 3;
+		timer.scheduleAtFixedRate(new TimerTask() {
+			int i = seconds;
+
+			public void run() {
+				if (i == 0) {
+					System.out.println(FIGHT);
+				} else if (i == 1) {
+					System.out.println(ONE);
+				} else if (i == 2) {
+					System.out.println(TWO);
+				} else if (i == 3) {
+					System.out.println(THREE);
+				}
+				i--;
+				if (i < 0)
+					timer.cancel();
+			}
+		}, 0, 1000);
+		try {
+			Thread.sleep(seconds * 1000);
+		} catch (InterruptedException ie) {
+			Thread.currentThread().interrupt();
+		}
+		return;
+	}
+	public static void countdown(int seconds) {
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+			int i = seconds;
+
+			public void run() {
+				i--;
+				System.out.print("");
+				if (i < 0)
+					timer.cancel();
+			}
+		}, 0, 1000);
+		try {
+			Thread.sleep(seconds * 750);
+		} catch (InterruptedException ie) {
+			Thread.currentThread().interrupt();
+		}
+		return;
+	}
 }

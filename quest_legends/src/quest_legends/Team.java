@@ -3,6 +3,7 @@ package quest_legends;
 import java.util.ArrayList;
 
 import quest_legends.Helpers.Color;
+import quest_legends.Helpers.GenericMethods;
 import quest_legends.Helpers.InputHandler;
 
 /*
@@ -95,6 +96,18 @@ public class Team implements Color {
 		return this.team;
 	}
 	/*
+	 * Set team 
+	 */
+	public void setTeam(ArrayList<Player> team) {
+		this.team = team;
+	}
+	/*
+	 * Shuffle turns in this team 
+	 */
+	public void shuffleTurns() {
+		setTeam(GenericMethods.shuffle(team));
+	}
+	/*
 	 * Set this team size.
 	 */
 	public int getTeamSize() {
@@ -106,14 +119,14 @@ public class Team implements Color {
 	 */
 	public void addPlayer(Player player) {
 		team.add(player);
-		player.setTeamId(this.id);
+		player.setTeam(this);
 	}
 
 	/*
 	 * Remove player from this team
 	 */
 	public void removePlayer(Player player) {
-		player.clearTeamId();
+		player.clearTeam();
 		team.remove(player);
 	}
 	/*

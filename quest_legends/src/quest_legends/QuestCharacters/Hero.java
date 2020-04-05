@@ -198,9 +198,9 @@ public class Hero extends QuestCharacter implements CellType {
 	 * points, then resurrects, and levels up. Total Defeated Monsters in fight
 	 * resets.
 	 */
-	public void exitFight() {
+	public void exitFight(int monsterLevel) {
 		if (isAlive()) {
-			setMoney(getMoney() + 100 * Fight.getMonstersLevel());
+			setMoney(getMoney() + 100 * monsterLevel);
 			setExperience(getExperience() + 2);
 			setFightsWon(getFightsWon() + 1);
 		}

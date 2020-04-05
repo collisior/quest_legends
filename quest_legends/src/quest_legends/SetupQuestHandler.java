@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import quest_legends.Helpers.CSVFilesHandler;
 import quest_legends.Helpers.Color;
+import quest_legends.Helpers.GenericMethods;
 import quest_legends.Helpers.InputHandler;
 import quest_legends.Helpers.QuestDetails;
 import quest_legends.QuestCharacters.Hero;
@@ -28,12 +29,12 @@ public class SetupQuestHandler implements QuestDetails, Color {
 			Hero hero = (Hero) chooseQuestHero(player);
 			player.setHero(hero);
 			player.setPiece(HERO_PIECE);
-			player.setTeamId(quest.team.getId());
+			player.setTeam(quest.team);
 			System.out.println(player + " your Hero is " + player.getHero());
 		}
-
+		
 		quest.addTeam(quest.team);
-//		board.putInRandomCell(team.getPiece());
+		quest.team.shuffleTurns();
 	}
 
 	static QuestCharacter chooseQuestHero(Player player) {

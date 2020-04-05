@@ -11,8 +11,12 @@ public class Main implements Vizualization {
 		
 		CSVFilesHandler.setData();
 		System.out.println(WELCOME);
+		
 
 		Quest game = new Quest();
+		game.startGame();
+		
+		
 		
 //		game.board = new QuestBoard(8,8);
 //		game.board.getBoard()[1][0].placePiece(new Piece('M'));
@@ -29,8 +33,8 @@ public class Main implements Vizualization {
 //		game.board.getBoard()[1][1].placePiece(new Piece('@'));
 //		game.board.displayBoard(game);
 		
-		game.startGame();
+
 		
 	}
-	
+
 }

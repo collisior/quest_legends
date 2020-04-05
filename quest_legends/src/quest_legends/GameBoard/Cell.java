@@ -156,4 +156,16 @@ public class Cell {
 	public void setType(String type) {
 		this.type = type;
 	}
+	public int getLane() {
+		int lane = 0;
+		for(int c = 0; c <= col; c++) {
+			if ((c + 1) % 3 == 0) {
+				lane++;
+			}
+		}
+		
+		return lane;
+	}
+	
+	
 }

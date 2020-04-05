@@ -1,63 +1,54 @@
 package quest_legends;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
+import java.util.PriorityQueue;
+import quest_legends.GameBoard.QuestBoard;
 import quest_legends.Helpers.Color;
-import quest_legends.Helpers.Generator;
-import quest_legends.Helpers.GenericMethods;
 import quest_legends.Helpers.Vizualization;
 import quest_legends.QuestCharacters.Hero;
 import quest_legends.QuestCharacters.Monster;
 
 public class Fight implements Color, Vizualization {
 
-	private static ArrayList<Monster> aliveMonsters = new ArrayList<Monster>();
-	private static ArrayList<Monster> deadMonsters = new ArrayList<Monster>();
-	private static int monsterTurnIndex = 0;
+	QuestBoard board = null;
+	ArrayList<Monster> aliveMonsters = new ArrayList<Monster>();
+	Monster monster;
+	ArrayList<Monster> deadMonsters = new ArrayList<Monster>();
+	PriorityQueue<Player> players = new PriorityQueue<Player>();
 
-	private void startFight(Team team) {
-		Fight.fightCountdown();
-		// TODO: FIGHT
-		return;
+	public Fight(QuestBoard board, Monster monster, PriorityQueue<Player> players) {
+		this.board = board;
+		this.monster = monster;
+		this.players = players;
 	}
-	
-	public static void fight(Team team) {
-		aliveMonsters = Generator.generateMonsters(team);
-//		Monster m1 = new Dragon("Natsunomeryu", 1, 100, 200, 10);
-//		aliveMonsters.set(0, m1);
-		GenericMethods.shuffle(aliveMonsters);
+
+	public void startFight() {
+		Vizualization.fightCountdown();
 		boolean fightStop = false;
 		while (!fightStop) {
-
-			if (fightContinues(team)) {
-				Hero hero = nextAliveHero(team);
-				Monster monster = nextAliveMonster();
-				System.out.println(GREEN + "\nHero "+ hero +" VERSUS Monster "+ monster+ RESET+"\n");
+			if (fightContinues()) {
+				Hero hero = nextAliveHero();
 				if (hero.isAlive() && monster.isAlive()) {
-					System.out.println(team.color+team.getCurrentTeamPlayer()+RESET +", it's your turn to attack " + monster+".");
+					System.out.println(GREEN + "\nHero " + hero + " VERSUS Monster " + monster + RESET + "\n");
 					round(hero, monster);
 					hero.endOfRound();
 				}
 			} else {
-				showWinner(team);
+				showWinner();
 				fightStop = true;
 			}
 		}
-		exitFight(team);
-//		for(Player player: team.getNextTeamPlayer())
+		return;
 	}
 
 	/*
 	 * Update stats for each hero. Resurrect heroes. If the monsters win the fight
 	 * the heroes lose half of their money.
 	 */
-	private static void exitFight(Team team) {
+	private void exitFight() {
 		// if monsters win, half of money are taken away from each player
-		System.out.println("\n\n\n>>>>>>>>>>>>> totalTeamHpValue(team)" + totalTeamHpValue(team));
-		if (totalTeamHpValue(team) <= 0) {
-			for (Player player : team.getTeam()) {
+		if (totalPlayersHpValue() <= 0) {
+			for (Player player : players) {
 				Hero hero = (Hero) player.getHero();
 				hero.setMoney(hero.getMoney() / 2);
 			}
@@ -65,9 +56,9 @@ public class Fight implements Color, Vizualization {
 		} else {
 			System.out.println(VICTORY + "\n" + MONSTERS + "\n" + DEFEATED);
 		}
-		for (Player player : team.getTeam()) {
+		for (Player player : players) {
 			Hero hero = (Hero) player.getHero();
-			hero.exitFight();
+			hero.exitFight(getMonstersLevel());
 		}
 		// totalDefeatedInFight
 		monsterCleaning();
@@ -76,12 +67,12 @@ public class Fight implements Color, Vizualization {
 	/*
 	 * 
 	 */
-	private static void round(Hero hero, Monster monster) {
+	private void round(Hero hero, Monster monster) {
 		System.out.println(hero.image());
 		heroAttacks(hero, monster);
 		System.out.println(GREEN + "Monster's turn to attack ...\n\n" + RESET);
 		System.out.println(monster.image());
-		countdown(2);
+		Vizualization.countdown(2);
 		if (monster.isAlive()) {
 			monsterAttacks(hero, monster);
 		} else {
@@ -89,16 +80,16 @@ public class Fight implements Color, Vizualization {
 			deadMonsters.add((Monster) monster);
 			aliveMonsters.remove(monster);
 			if (!aliveMonsters.isEmpty()) {
-				System.out.println( MONSTER + "\n" + DEFEATED);
+				System.out.println(MONSTER + "\n" + DEFEATED);
 			}
 		}
 		hero.setHasDodgedAttack(false);
 		monster.setHasDodgedAttack(false);
 	}
 
-	public static void heroAttacks(Hero hero, Monster monster) {
+	public void heroAttacks(Hero hero, Monster monster) {
 		hero.chooseCurrentAmmunition();
-		System.out.println("Your attack: "+hero.getCurrentAmmunition()+"\n"+hero.getCurrentAmmunition().image());
+		System.out.println("Your attack: " + hero.getCurrentAmmunition() + "\n" + hero.getCurrentAmmunition().image());
 		double damage = hero.damageCalculation(monster);
 
 		if (monster.dodgeAttack()) {
@@ -112,7 +103,7 @@ public class Fight implements Color, Vizualization {
 	/*
 	 * 
 	 */
-	public static void monsterAttacks(Hero hero, Monster monster) {
+	public void monsterAttacks(Hero hero, Monster monster) {
 
 		if (hero.dodgeAttack()) {
 			// hero escapes
@@ -126,25 +117,23 @@ public class Fight implements Color, Vizualization {
 		}
 	}
 
-	private static Monster nextAliveMonster() {
-		Monster monster = aliveMonsters.get((monsterTurnIndex + 1) % aliveMonsters.size());
-		return monster;
-	}
-
-	private static Hero nextAliveHero(Team team) {
-		Hero hero = (Hero) team.getNextTeamPlayer().getHero();
+	private Hero nextAliveHero() {
+		Player player = players.poll();
+		Hero hero = (Hero) players.poll().getHero();
 		if (hero.isAlive()) {
+			players.add(player);
 			return hero;
 		}
-		return nextAliveHero(team);
+		players.add(player);
+		return nextAliveHero();
 	}
 
-	private static void showWinner(Team team) {
-		if ((totalTeamHpValue(team) > 0) && (totalMonstersHpValue() <= 0)) {
-			((TeamQuest) team).addFightsWon();
+	private void showWinner() {
+		if ((totalPlayersHpValue() > 0) && (monster.getHp() <= 0)) {
+			((TeamQuest) players.peek().getTeam()).addFightsWon();
 			System.out.println("Team wins the fight!");
 		} else {
-			((TeamQuest) team).addFightsLost();
+			((TeamQuest) players.peek().getTeam()).addFightsLost();
 			System.out.println("Monsters wins the fight!");
 		}
 	}
@@ -152,8 +141,8 @@ public class Fight implements Color, Vizualization {
 	/*
 	 * Return checkWinner
 	 */
-	public static boolean fightContinues(Team team) {
-		if ((totalTeamHpValue(team) > 0) && (totalMonstersHpValue() > 0)) {
+	public boolean fightContinues() {
+		if ((totalPlayersHpValue() > 0) && (monster.getHp() > 0)) {
 			return true;
 		}
 		return false;
@@ -162,24 +151,10 @@ public class Fight implements Color, Vizualization {
 	/*
 	 * Return total HP for this team.
 	 */
-	public static int totalTeamHpValue(Team team) {
+	public int totalPlayersHpValue() {
 		int totalHp = 0;
-		for (Player player : team.getTeam()) {
+		for (Player player : players) {
 			totalHp += player.getHero().getHp();
-		}
-		return totalHp;
-	}
-
-	/*
-	 * Return total HP for this team.
-	 */
-	public static int totalMonstersHpValue() {
-		if (aliveMonsters.isEmpty()) {
-			return 0;
-		}
-		int totalHp = 0;
-		for (Monster monster : aliveMonsters) {
-			totalHp += monster.getHp();
 		}
 		return totalHp;
 	}
@@ -187,7 +162,7 @@ public class Fight implements Color, Vizualization {
 	/*
 	 * Get Monster's max level from this fight.
 	 */
-	public static int getMonstersLevel() {
+	public int getMonstersLevel() {
 		int level = 0;
 		for (Monster monster : deadMonsters) {
 			if (level < monster.getLevel()) {
@@ -197,58 +172,9 @@ public class Fight implements Color, Vizualization {
 		return level;
 	}
 
-	public static void monsterCleaning() {
+	public void monsterCleaning() {
 		aliveMonsters.clear();
 		deadMonsters.clear();
-		monsterTurnIndex = 0;
-	}
-
-	public static void fightCountdown() {
-		Timer timer = new Timer();
-		int seconds = 3;
-		timer.scheduleAtFixedRate(new TimerTask() {
-			int i = seconds;
-
-			public void run() {
-				if (i == 0) {
-					System.out.println(FIGHT);
-				} else if (i == 1) {
-					System.out.println(ONE);
-				} else if (i == 2) {
-					System.out.println(TWO);
-				} else if (i == 3) {
-					System.out.println(THREE);
-				}
-				i--;
-				if (i < 0)
-					timer.cancel();
-			}
-		}, 0, 1000);
-		try {
-			Thread.sleep(seconds * 1000);
-		} catch (InterruptedException ie) {
-			Thread.currentThread().interrupt();
-		}
-		return;
-	}
-	public static void countdown(int seconds) {
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
-			int i = seconds;
-
-			public void run() {
-				i--;
-				System.out.print("");
-				if (i < 0)
-					timer.cancel();
-			}
-		}, 0, 1000);
-		try {
-			Thread.sleep(seconds * 750);
-		} catch (InterruptedException ie) {
-			Thread.currentThread().interrupt();
-		}
-		return;
 	}
 
 }
