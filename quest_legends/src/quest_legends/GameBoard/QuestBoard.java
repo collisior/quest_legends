@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import quest_legends.Game;
 import quest_legends.Player;
 import quest_legends.Quest;
+import quest_legends.Team;
 import quest_legends.TeamQuest;
 import quest_legends.Helpers.Color;
+import quest_legends.Helpers.QuestDetails;
 import quest_legends.Helpers.Vizualization;
+import quest_legends.QuestCharacters.Hero;
 import quest_legends.QuestCharacters.Monster;
 
-public class QuestBoard extends Board implements CellType, Color, Vizualization {
+public class QuestBoard extends Board implements CellType, Color, Vizualization, QuestDetails {
 	
 	public ArrayList<Monster> aliveMonsters = new ArrayList<Monster>();
 	/*
@@ -30,11 +33,17 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization 
 	}
 
 	public boolean isValidMove(Player player, int row, int col) {
+		System.out.println("Row, col = " + row+" " + col);
 		if (boardPositionExists(row, col)) {
-			if (this.getBoard()[row][col].getType() != BLOCKED) {
+			if (this.getBoard()[row][col].getType() == BLOCKED) {
 				System.out.println(BLOCKED_CELL_MESSAGE);
 				return false;
-			} else {
+			} else if (this.getBoard()[row][col].pieceExists(HERO_PIECE)) {
+				System.out.println(ANOTHER_HERO_OCCUPIED_MESSAGE);
+				return false;
+			}
+			else {
+				System.out.println("Updating position..." + row+" " + col);
 				updateBoard(player, row, col);
 				return true;
 			}
@@ -54,8 +63,8 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization 
 	 * Move monster's mark one cell further towards Hero's Nexus.
 	 */
 	public void moveMonster(Monster monster) {
-		board[monster.current_row][monster.current_col].removePiece(new Piece('M'));
-		board[monster.current_row + 1][monster.current_col].placePiece(new Piece('M'));
+		board[monster.current_row][monster.current_col].removePiece(MONSTER_PIECE);
+		board[monster.current_row + 1][monster.current_col].placePiece(MONSTER_PIECE);
 		monster.updatePosition(monster.current_row + 1, monster.current_col);
 	}
 
@@ -67,6 +76,8 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization 
 		
 		if (cell.pieceExists(MONSTER_PIECE)) { // This cell contains monster -> start fight
 			// TODO: fight with monster
+		} else {
+			CellType.boostSkills(this, (Hero) currentPlayer.getHero());
 		}
 	}
 
@@ -100,6 +111,18 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization 
 	public void displayBoard(Game game) {
 		if (game instanceof Quest) {
 			DisplayBoard.showQuestBoard((Quest) game, this);
+		}
+	}
+	/*
+	 * Spread p;ayers on their Nexus area.
+	 */
+	public void spreadPlayers(Team team) {
+		int Nexus_col = 0; int lane = 1;
+		for(Player player : team.getTeam()) {
+			int random_col = Quest.random.nextInt(10)%2 + Nexus_col;
+			updateBoard(player, rows-1, random_col);
+			player.setHomeLane(lane);
+			Nexus_col += 3; lane++;
 		}
 	}
 

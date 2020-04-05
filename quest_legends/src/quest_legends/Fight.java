@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import quest_legends.Helpers.Color;
+import quest_legends.Helpers.Generator;
 import quest_legends.Helpers.GenericMethods;
 import quest_legends.Helpers.Vizualization;
 import quest_legends.QuestCharacters.Hero;
@@ -23,7 +24,7 @@ public class Fight implements Color, Vizualization {
 	}
 	
 	public static void fight(Team team) {
-		aliveMonsters = SetupQuestHandler.generateMonsters(team);
+		aliveMonsters = Generator.generateMonsters(team);
 //		Monster m1 = new Dragon("Natsunomeryu", 1, 100, 200, 10);
 //		aliveMonsters.set(0, m1);
 		GenericMethods.shuffle(aliveMonsters);

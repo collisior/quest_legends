@@ -270,6 +270,9 @@ public interface Vizualization {
 	public static final String BLOCKED_CELL_MESSAGE = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n" + RED1
 			+ "   You shall not pass into this cell! Try another move.\n" + RESET1
 			+ "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
+	public static final String ANOTHER_HERO_OCCUPIED_MESSAGE = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n" + RED1
+			+ "   You can't go to this cell! Another Hero is there! Try another move.\n" + RESET1
+			+ "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
 	public static final String BOARD_CELLS_INFO = 
 			"Quest Board Cell Inormation: \n\n" 
 			+ "Non-accessible cell:         Magic Market Cell:          Monster Cell: \n"  

@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import quest_legends.Player;
 import quest_legends.Quest;
 import quest_legends.Helpers.Color;
+import quest_legends.Helpers.QuestDetails;
 import quest_legends.QuestCharacters.Monster;
 
-public class DisplayBoard implements Color, CellType {
+public class DisplayBoard implements Color, CellType, QuestDetails {
 	/*
 	 * Display this quest game-board at current state.
 	 */

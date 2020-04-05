@@ -6,26 +6,26 @@ import quest_legends.GameBoard.QuestBoard;
 import quest_legends.Helpers.Color;
 import quest_legends.Helpers.GenericMethods;
 import quest_legends.Helpers.InputHandler;
+import quest_legends.Helpers.QuestDetails;
 import quest_legends.Helpers.Vizualization;
 
 /*
  * Rules for the game (flow)
  */
-public class Quest extends Game implements Color, Vizualization {
+public class Quest extends Game implements Color, Vizualization, QuestDetails {
 	public static Random random = new Random();
-	public static double chanceToMeetMonsters = 0.8;
-	static int levelEnd = 10; // level number to indicate winners (reach-level quest mode)
+	
 	public QuestBoard board;
 	public Player currentPlayer = null;
 	public TeamQuest team = new TeamQuest(1);
 
-	final static int TEAM_CAPACITY = 3;
 
 	public void startGame() {
-		board = new QuestBoard();
+		board = new QuestBoard(8, 8);
 		board.displayBoard(this);
 		SetupQuestHandler.setupTeam(this);
 		setGamersQueue(GenericMethods.shuffle(getPlayers()));
+		board.spreadPlayers(team);
 		currentPlayer = (Player) getNextInQueue(mapPlayers);
 		boolean gameStop = false;
 
@@ -33,9 +33,11 @@ public class Quest extends Game implements Color, Vizualization {
 		while (!gameStop) {
 			makeMove();
 			if (questEnd()) {
-				gameStop = questEnd();
+				gameStop = questEnd(); //or continue
+				System.out.println(VICTORY);
 			}
-			currentPlayer = (Player) getNextInQueue(mapTeams);
+			
+			currentPlayer = (Player) getNextInQueue(mapPlayers);
 		}
 	}
 
@@ -47,7 +49,6 @@ public class Quest extends Game implements Color, Vizualization {
 			System.out.println(currentPlayer
 					+ ", enter your move:\n 'W' - up, 'A'- left, 'S' - down, 'D'- right, 'Q' - quit, 'B' - back to Nexus, 'I' - print info, 'M'- show map. \n");
 			char input = Character.toUpperCase(InputHandler.getCharacter(acceptedInputs));
-			char cellType = 0;
 			switch (input) {
 			case 'W':
 //				System.out.println("Move up >>");
@@ -78,7 +79,7 @@ public class Quest extends Game implements Color, Vizualization {
 			case 'B':
 				// TODO: Go to Nexus - Market
 			case 'I': // all team heroes information
-				cellType = 'i';
+				printInfo();
 				break;
 			case 'M': // show map
 				board.displayBoard(this);
@@ -104,7 +105,9 @@ public class Quest extends Game implements Color, Vizualization {
 
 	
 	private boolean questEnd() {
-		//TODO: End Quest
+		if (currentPlayer.current_row == 0) { //player reacehd Monsters Nexus 
+			return true;
+		}
 		return false;
 	}
 

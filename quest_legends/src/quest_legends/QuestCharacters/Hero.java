@@ -10,9 +10,10 @@ import quest_legends.Ammunitions.Fists;
 import quest_legends.Ammunitions.Potion;
 import quest_legends.Ammunitions.Spell;
 import quest_legends.Ammunitions.Weapon;
+import quest_legends.GameBoard.CellType;
 import quest_legends.Helpers.InputHandler;
 
-public class Hero extends QuestCharacter {
+public class Hero extends QuestCharacter implements CellType {
 
 	private double strength, dexterity, agility, mana, experience, money;
 	private PersonalStorage storage;
@@ -303,22 +304,5 @@ public class Hero extends QuestCharacter {
 	public String image() {
 		return null;
 	}
-	/*
-	handleCell() {
-		if (board[current_row][current_col] == Koulou) {
-		 	increase dexterity
-		 if (board[current_row][current_col] == Cave) {
-		
-	}
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

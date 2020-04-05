@@ -12,7 +12,8 @@ public class Player {
 	private Piece piece; // e.g. can be used in TicTacToe, Checkers
 	boolean WinnerStatus;
 	private int totalWins;
-	public int current_row = -1, current_col = -1;
+	public int current_row = 0, current_col = 0;
+	private int home_lane = 0;
 	private int id = -1;
 	private int teamId;
 	private QuestCharacter hero;
@@ -140,5 +141,15 @@ public class Player {
 	public int getCurrentRow() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+
+	public int getHomeLane() {
+		return home_lane;
+	}
+
+
+	public void setHomeLane(int home_lane) {
+		this.home_lane = home_lane;
 	}
 }

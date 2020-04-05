@@ -8,12 +8,12 @@ import quest_legends.Ammunitions.LightningSpell;
 import quest_legends.Ammunitions.Potion;
 import quest_legends.Ammunitions.Weapon;
 import quest_legends.Helpers.CSVFilesHandler;
-import quest_legends.Helpers.FilesInfo;
+import quest_legends.Helpers.QuestDetails;
 import quest_legends.Helpers.InputHandler;
 import quest_legends.QuestCharacters.Hero;
 import quest_legends.QuestCharacters.QuestCharacter;
 
-public class Market implements FilesInfo {
+public class Market implements QuestDetails {
 
 	public static void enter(Player player) {
 
