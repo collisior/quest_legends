@@ -1,10 +1,7 @@
 package quest_legends;
 
-import java.util.ArrayList;
-
 import quest_legends.Helpers.CSVFilesHandler;
 import quest_legends.Helpers.Color;
-import quest_legends.Helpers.GenericMethods;
 import quest_legends.Helpers.InputHandler;
 import quest_legends.Helpers.QuestDetails;
 import quest_legends.QuestCharacters.Hero;
@@ -14,8 +11,6 @@ import quest_legends.QuestCharacters.Sorcerer;
 import quest_legends.QuestCharacters.Warrior;
 
 public class SetupQuestHandler implements QuestDetails, Color {
-
-	static ArrayList<String> list = new ArrayList<String>();
 
 	public static void setupTeam(Quest quest) {
 //		System.out.printf(
@@ -32,7 +27,36 @@ public class SetupQuestHandler implements QuestDetails, Color {
 			player.setTeam(quest.team);
 			System.out.println(player + " your Hero is " + player.getHero());
 		}
-		
+
+		quest.addTeam(quest.team);
+		quest.team.shuffleTurns();
+	}
+	
+	public static void quickSetupTeam(Quest quest) {
+//		System.out.printf(
+//				"\nHow many players will be playing in your team? \nMax number of players in one team is %d. \n",
+//				Quest.TEAM_CAPACITY);
+//		int numPlayers = InputHandler.getInteger(1, Quest.TEAM_CAPACITY);
+		int numPlayers = TEAM_CAPACITY;
+		for (int j = 0; j < numPlayers; j++) {
+			Player player = quest.addPlayer();
+			quest.team.addPlayer(player);
+			Hero hero = null;
+			if (j==0) {
+				hero =  new Warrior("Warrior", 100, 700, 500, 600, 2200, 7);
+			}
+			if (j==1) {
+				hero =  new Paladin("Paladin", 300, 740, 650, 750, 2500, 7);
+			}
+			if (j==2) {
+				hero =  new Sorcerer("Sorcerer", 700, 550, 600, 500, 2500, 7);
+			}
+			player.setHero(hero);
+			player.setPiece(HERO_PIECE);
+			player.setTeam(quest.team);
+			System.out.println(player + " your Hero is " + player.getHero());
+		}
+
 		quest.addTeam(quest.team);
 		quest.team.shuffleTurns();
 	}

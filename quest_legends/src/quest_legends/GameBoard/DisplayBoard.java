@@ -48,6 +48,7 @@ public class DisplayBoard implements Color, CellType, QuestDetails {
 				}
 				b += tmp;
 				tmp = "";
+				
 			}
 			b += ll + "\n " + i;
 			for (int j = 0; j < cols; j++) { // monster side
@@ -122,8 +123,6 @@ public class DisplayBoard implements Color, CellType, QuestDetails {
 					return monster;
 				}
 			}
-			return new Monster("", 2, 12, 12, 12);
-
 		}
 		return null;
 	}

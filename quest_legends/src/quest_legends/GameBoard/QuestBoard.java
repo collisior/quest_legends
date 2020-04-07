@@ -2,17 +2,20 @@ package quest_legends.GameBoard;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-
 import quest_legends.Fight;
 import quest_legends.Game;
 import quest_legends.Player;
 import quest_legends.Quest;
 import quest_legends.Team;
 import quest_legends.Helpers.Color;
+import quest_legends.Helpers.Generator;
 import quest_legends.Helpers.QuestDetails;
 import quest_legends.Helpers.Vizualization;
+import quest_legends.QuestCharacters.Dragon;
 import quest_legends.QuestCharacters.Hero;
 import quest_legends.QuestCharacters.Monster;
+import quest_legends.QuestCharacters.Spirit;
+import quest_legends.QuestCharacters.Exoskeleton;
 
 public class QuestBoard extends Board implements CellType, Color, Vizualization, QuestDetails {
 
@@ -25,6 +28,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	public QuestBoard() {
 		super();
 		spreadCells();
+		putMonstersTest(); // TODO: change to random generating monsters
 	}
 
 	/*
@@ -35,7 +39,26 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		spreadCells();
 	}
 
+	public void putMonstersTest() {
+		ArrayList<Monster> newMonsters = new ArrayList<Monster>();
+		Monster monster1 = new Dragon("Dragon", 3, 300, 400, 35);
+		Monster monster2 = new Spirit("Spirit", 3, 300, 400, 35);
+		Monster monster3 = new Exoskeleton("Exoskeleton", 3, 300, 400, 35);
+		newMonsters.add(monster1);
+		newMonsters.add(monster2);
+		newMonsters.add(monster3);
+		int Nexus_col = 0;
+		for (Monster monster : newMonsters) {
+			int random_col = Quest.random.nextInt(10) % 2 + Nexus_col;
+			monster.current_row = 0;
+			monster.current_col = random_col;
+			board[monster.current_row][monster.current_col].placePiece(MONSTER_PIECE);
+			Nexus_col += 3;
+		}
+	}
+
 	public boolean isValidMove(Player player, int row, int col) {
+		System.out.println("is valid: " + row + " " + col);
 		if (boardPositionExists(row, col)) {
 			if (this.getBoard()[row][col].getType() == BLOCKED) {
 				System.out.println(BLOCKED_CELL_MESSAGE);
@@ -44,6 +67,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 				System.out.println(ANOTHER_HERO_OCCUPIED_MESSAGE);
 				return false;
 			} else if (isBehindMonster(row, col)) {
+				System.out.println(">>>>  is behind");
 				System.out.println(BEHIND_MONSTER_MESSAGE);
 				return false;
 			} else {
@@ -58,6 +82,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 * Move player's mark on targeted cell position on the game-board.
 	 */
 	public void updateBoard(Player player, int row, int col) {
+		System.out.println(">>>> updating position");
 		this.getBoard()[player.current_row][player.current_col].removePiece(player.getPiece());
 		board[row][col].placePiece(player.getPiece());
 		player.updatePosition(row, col);
@@ -66,7 +91,8 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	/*
 	 * Move monster's mark one cell further towards Hero's Nexus.
 	 */
-	public void moveMonster(Monster monster) {
+	public void moveForward(Monster monster) {
+		System.out.println(">>>> forward move Monster");
 		if (isBehindHero(monster.current_row + 1, monster.current_col)) {
 			// stay at the same position. Can't pass behind alive hero.
 		} else {
@@ -74,7 +100,12 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			board[monster.current_row + 1][monster.current_col].placePiece(MONSTER_PIECE);
 			monster.updatePosition(monster.current_row + 1, monster.current_col);
 		}
+	}
 
+	public void moveAllMonsters() {
+		for (Monster monster : aliveMonsters) {
+			moveForward(monster);
+		}
 	}
 
 	/*
@@ -122,20 +153,18 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	/*
 	 * Return list of players that are in the radius to fight this monster
 	 */
-	public PriorityQueue<Player> fightRadius(Monster monster, ArrayList<Player> tmpTeam) {
-		PriorityQueue<Player> players = new PriorityQueue<Player>();
+	public ArrayList<Player> fightRadius(Monster monster, ArrayList<Player> tmpTeam) {
+		ArrayList<Player> players = new ArrayList<Player>();
 		for (Player player : tmpTeam) {
-			if (player.current_row == monster.current_row) {
+			if (player.current_row == monster.current_row) { // if on the same row
 				if (player.current_col == monster.current_col || player.current_col - 1 == monster.current_col
 						|| player.current_col + 1 == monster.current_col) {
 					players.add(player);
-					tmpTeam.remove(player);
 				}
-			} else if (player.current_row == monster.current_row + 1) {
+			} else if (player.current_row == monster.current_row + 1) { // if on neighboring row
 				if (player.current_col == monster.current_col || player.current_col - 1 == monster.current_col
 						|| player.current_col + 1 == monster.current_col) {
 					players.add(player);
-					tmpTeam.remove(player);
 				}
 			}
 		}
@@ -148,10 +177,13 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	public ArrayList<Fight> getFights(Team team) {
 		ArrayList<Fight> fights = new ArrayList<Fight>();
 		ArrayList<Player> tmpTeam = new ArrayList<Player>();
-		for (Player player : team.getTeam()) tmpTeam.add(player); //deep copy of team
-		
+		for (Player player : team.getTeam()) {
+			tmpTeam.add(player); // deep copy of team
+		}
 		for (Monster monster : aliveMonsters) {
-			PriorityQueue<Player> players = fightRadius(monster, tmpTeam);
+			ArrayList<Player> players = fightRadius(monster, tmpTeam);
+			for (Player player : players)
+				tmpTeam.remove(player);
 			if (!players.isEmpty()) {
 				fights.add(new Fight(this, monster, players));
 			}
@@ -160,6 +192,10 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	private boolean isBehindMonster(int row, int col) {
+
+		if (row - 1 < 0 || col - 1 < 0 || col + 1 == cols || row + 1 == rows) {
+			return false;
+		}
 		if (this.getBoard()[row + 1][col].pieceExists(MONSTER_PIECE)) {
 			return true;
 		} else if (this.getBoard()[row + 1][col + 1].pieceExists(MONSTER_PIECE)) {
@@ -172,6 +208,10 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	private boolean isBehindHero(int row, int col) {
+		System.out.println("isBehind Hero");
+		if (row - 1 < 0 || col - 1 < 0 || col + 1 == cols || row == rows) {
+			return false;
+		}
 		if (this.getBoard()[row - 1][col].pieceExists(HERO_PIECE)) {
 			return true;
 		} else if (this.getBoard()[row - 1][col + 1].pieceExists(HERO_PIECE)) {
@@ -225,6 +265,21 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			player.setHomeLane(lane);
 			Nexus_col += 3;
 			lane++;
+		}
+	}
+	/*
+	 * Generates new set monsters with team's maximum level.
+	 * Spread these new monsters on their Nexus lanes. 
+	 */
+	public void spawnMonsters(Team team) {
+		ArrayList<Monster> newMonsters = Generator.generateMonsters(team);
+		int laneNum = 0;
+		for (Monster monster : newMonsters) {
+			int random_col = Quest.random.nextInt(10) % 2 + laneNum;
+			monster.current_row = 0;
+			monster.current_col = random_col;
+			board[monster.current_row][monster.current_col].placePiece(MONSTER_PIECE);
+			laneNum += 3;
 		}
 	}
 

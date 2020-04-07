@@ -22,31 +22,40 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 	public void startGame() {
 		board = new QuestBoard(8, 8);
-		board.displayBoard(this);
-		SetupQuestHandler.setupTeam(this);
-		
+//		SetupQuestHandler.setupTeam(this);
+		SetupQuestHandler.quickSetupTeam(this);
+
 		board.spreadPlayers(team);
+
 		currentPlayer = team.getCurrentTeamPlayer();
 		boolean gameStop = false;
-
+		int monster_spawns = 0;
 		board.displayBoard(this);
 		while (!gameStop) {
-			
-			for(int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
+
+			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
 				currentPlayer = team.getNextTeamPlayer();
 				makeMove();
 				if (questEnd()) {
-					gameStop = true;	
+					gameStop = true;
 				}
 			}
 			if (!gameStop) {
-				//check monsters nearby. start fight if monsters are in fight radius
+				// check monsters nearby. start fight if monsters are in fight radius
 				ArrayList<Fight> fights = board.getFights(team);
-				for(Fight fight : fights ) {
+				System.out.println("Total fights in this round = " + fights.size());
+				for (Fight fight : fights) {
 					fight.startFight();
+					System.out.println("Fight ended");
 				}
-				
+				System.out.println("All Fights of this round ended.");
 			}
+			board.moveAllMonsters();
+			monster_spawns++;
+			if (monster_spawns == MONSTER_SPAWN_FREQUENCY) {
+				board.spawnMonsters(team);
+			}
+			
 		}
 	}
 
@@ -54,7 +63,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 		boolean playerMoved = false;
 		while (!playerMoved) {
-			System.out.println(currentPlayer + ", choose your move:\n " + AcceptedMoveInputsInfo);
+			System.out.println(currentPlayer + ", choose your move:\n" + AcceptedMoveInputsInfo);
 			char input = Character.toUpperCase(InputHandler.getCharacter(AcceptedMoveInputs));
 			switch (input) {
 			case 'W':
@@ -79,7 +88,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					playerMoved = true;
 				}
 				break;
-			case 'T': //Teleport
+			case 'T': // Teleport
 				board.teleport(currentPlayer);
 				playerMoved = true;
 				break;

@@ -12,8 +12,9 @@ public interface QuestDetails {
 
 	public static char[] AcceptedMoveInputs = { 'W', 'w', 'A', 'a', 'S', 's', 'D', 'd', 'Q', 'q', 'I', 'i', 'M', 'm',
 			'B', 'b', 'T', 't' };
-	public static String AcceptedMoveInputsInfo = "'W' - up, 'A'- left, 'S' - down, 'D'- right, "
-			+ "'Q' - quit, 'B' - back to Nexus, 'T' - teleport, 'I' - print info, 'M'- show map.";
+	public static String AcceptedMoveInputsInfo = "[W] - up,	[A] - left,		[S] - down,		[D] - right,\n"
+			+ "[M]- show map, 	[T] - teleport, 	[B] - back to Nexus,	[I] - info,\n"
+			+ "[Q] - quit \n";
 
 	public static Piece MONSTER_PIECE = new Piece('M');
 	public static Piece HERO_PIECE = new Piece('H');

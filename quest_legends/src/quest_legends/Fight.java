@@ -1,9 +1,10 @@
 package quest_legends;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.Deque;
 import quest_legends.GameBoard.QuestBoard;
 import quest_legends.Helpers.Color;
+import quest_legends.Helpers.GenericDeque;
 import quest_legends.Helpers.Vizualization;
 import quest_legends.QuestCharacters.Hero;
 import quest_legends.QuestCharacters.Monster;
@@ -11,15 +12,16 @@ import quest_legends.QuestCharacters.Monster;
 public class Fight implements Color, Vizualization {
 
 	QuestBoard board = null;
-	ArrayList<Monster> aliveMonsters = new ArrayList<Monster>();
 	Monster monster;
-	ArrayList<Monster> deadMonsters = new ArrayList<Monster>();
-	PriorityQueue<Player> players = new PriorityQueue<Player>();
+	ArrayList<Player> players = new ArrayList<Player>();
+	Deque<Player> playersQueue;
 
-	public Fight(QuestBoard board, Monster monster, PriorityQueue<Player> players) {
+	public Fight(QuestBoard board, Monster monster, ArrayList<Player> players) {
 		this.board = board;
 		this.monster = monster;
 		this.players = players;
+		this.playersQueue = GenericDeque.setQueue(players);
+
 	}
 
 	public void startFight() {
@@ -38,7 +40,7 @@ public class Fight implements Color, Vizualization {
 				fightStop = true;
 			}
 		}
-		return;
+		exitFight();
 	}
 
 	/*
@@ -60,8 +62,6 @@ public class Fight implements Color, Vizualization {
 			Hero hero = (Hero) player.getHero();
 			hero.exitFight(getMonstersLevel());
 		}
-		// totalDefeatedInFight
-		monsterCleaning();
 	}
 
 	/*
@@ -77,9 +77,9 @@ public class Fight implements Color, Vizualization {
 			monsterAttacks(hero, monster);
 		} else {
 			hero.getDefeatedMonstersFight().add(monster);
-			deadMonsters.add((Monster) monster);
-			aliveMonsters.remove(monster);
-			if (!aliveMonsters.isEmpty()) {
+			board.deadMonsters.add((Monster) monster);
+			board.aliveMonsters.remove(monster);
+			if (!board.aliveMonsters.isEmpty()) {
 				System.out.println(MONSTER + "\n" + DEFEATED);
 			}
 		}
@@ -118,22 +118,23 @@ public class Fight implements Color, Vizualization {
 	}
 
 	private Hero nextAliveHero() {
-		Player player = players.poll();
-		Hero hero = (Hero) players.poll().getHero();
+		Player player = playersQueue.pollFirst();
+		System.out.println("playersQueue.size() = "+playersQueue.size());
+		Hero hero = (Hero) player.getHero();
 		if (hero.isAlive()) {
 			players.add(player);
 			return hero;
 		}
-		players.add(player);
+		playersQueue = GenericDeque.enqueue(playersQueue, player);
 		return nextAliveHero();
 	}
 
 	private void showWinner() {
 		if ((totalPlayersHpValue() > 0) && (monster.getHp() <= 0)) {
-			((TeamQuest) players.peek().getTeam()).addFightsWon();
+			((TeamQuest) players.get(0).getTeam()).addFightsWon();
 			System.out.println("Team wins the fight!");
 		} else {
-			((TeamQuest) players.peek().getTeam()).addFightsLost();
+			((TeamQuest) players.get(0).getTeam()).addFightsLost();
 			System.out.println("Monsters wins the fight!");
 		}
 	}
@@ -164,7 +165,7 @@ public class Fight implements Color, Vizualization {
 	 */
 	public int getMonstersLevel() {
 		int level = 0;
-		for (Monster monster : deadMonsters) {
+		for (Monster monster : board.deadMonsters) {
 			if (level < monster.getLevel()) {
 				level = monster.getLevel();
 			}
@@ -172,9 +173,5 @@ public class Fight implements Color, Vizualization {
 		return level;
 	}
 
-	public void monsterCleaning() {
-		aliveMonsters.clear();
-		deadMonsters.clear();
-	}
 
 }
