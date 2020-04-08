@@ -149,8 +149,8 @@ public abstract class Board {
 		while (playerInputIsValid == false) {
 
 			row_col = InputHandler.getTwoIntegers();
-			row_col[0] = row_col[0] - 1;
-			row_col[1] = row_col[1] - 1;
+			row_col[0] = row_col[0];
+			row_col[1] = row_col[1];
 
 			if (boardPositionExists(row_col[0], row_col[1])) {
 				playerInputIsValid = true;
@@ -158,7 +158,7 @@ public abstract class Board {
 				System.out.printf(
 						"\nGiven (%d, %d) cell position is out of range!"
 						+ "\nTry different position in range rows: [1, %d] and cols: [1, %d].\n",
-						row_col[0] + 1, row_col[1] + 1, rows, cols);
+						row_col[0], row_col[1], rows, cols);
 			}
 		}
 		return row_col;

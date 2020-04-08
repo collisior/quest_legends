@@ -29,7 +29,8 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 		currentPlayer = team.getCurrentTeamPlayer();
 		boolean gameStop = false;
-		int monster_spawns = 0;
+		int monster_spawns = MONSTER_SPAWN_FREQUENCY; //number of rounds until next monsters spawn
+		board.spawnMonsters(team);
 		board.displayBoard(this);
 		while (!gameStop) {
 
@@ -51,9 +52,11 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 				System.out.println("All Fights of this round ended.");
 			}
 			board.moveAllMonsters();
-			monster_spawns++;
-			if (monster_spawns == MONSTER_SPAWN_FREQUENCY) {
+			System.out.println("monsters in this board "+board.aliveMonsters.size());
+			monster_spawns--;
+			if (monster_spawns == 0) {
 				board.spawnMonsters(team);
+				monster_spawns = MONSTER_SPAWN_FREQUENCY;
 			}
 			
 		}

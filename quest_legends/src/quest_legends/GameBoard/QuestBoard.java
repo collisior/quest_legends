@@ -131,8 +131,13 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 		while (playerInputIsValid == false) {
 			int[] row_col = getBoardPositionFromUser(); // get teleport position
-			// if player is NOT in his own home lane, teleport to his own lane is OK
-			if (board[player.current_row][player.current_col].getLane() != player.getHomeLane()) {
+			
+			if (row_col[0] == 0) {
+				System.out.println("Can't teleport to Monster Nexus!");
+			} else if (row_col[0] == rows - 1) {
+				System.out.println("Can't teleport to your Nexus!");
+			} else if (board[player.current_row][player.current_col].getLane() != player.getHomeLane()) {
+				// if player is NOT in his own home lane, teleport to his own lane is OK
 				if (isValidMove(player, row_col[0], row_col[1])) {
 					playerInputIsValid = true;
 				}
@@ -208,7 +213,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	private boolean isBehindHero(int row, int col) {
-		System.out.println("isBehind Hero");
 		if (row - 1 < 0 || col - 1 < 0 || col + 1 == cols || row == rows) {
 			return false;
 		}
@@ -267,12 +271,14 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			lane++;
 		}
 	}
+
 	/*
-	 * Generates new set monsters with team's maximum level.
-	 * Spread these new monsters on their Nexus lanes. 
+	 * Generates new set monsters with team's maximum level. Spread these new
+	 * monsters on their Nexus lanes.
 	 */
 	public void spawnMonsters(Team team) {
 		ArrayList<Monster> newMonsters = Generator.generateMonsters(team);
+		System.out.println("new monsters spawned");
 		int laneNum = 0;
 		for (Monster monster : newMonsters) {
 			int random_col = Quest.random.nextInt(10) % 2 + laneNum;
@@ -280,6 +286,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			monster.current_col = random_col;
 			board[monster.current_row][monster.current_col].placePiece(MONSTER_PIECE);
 			laneNum += 3;
+			aliveMonsters.add(monster);
 		}
 	}
 

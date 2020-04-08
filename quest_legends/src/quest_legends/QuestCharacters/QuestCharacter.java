@@ -2,9 +2,10 @@ package quest_legends.QuestCharacters;
 
 import quest_legends.PersonalStorage;
 import quest_legends.Quest;
+import quest_legends.GameBoard.CellType;
 import quest_legends.Helpers.Color;
 
-public abstract class QuestCharacter implements Color {
+public abstract class QuestCharacter implements Color, CellType {
 	protected String name;
 	protected double hp;
 	protected int level;

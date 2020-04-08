@@ -13,7 +13,7 @@ import quest_legends.Ammunitions.Weapon;
 import quest_legends.GameBoard.CellType;
 import quest_legends.Helpers.InputHandler;
 
-public class Hero extends QuestCharacter implements CellType {
+public class Hero extends QuestCharacter  {
 
 	private double strength, dexterity, agility, mana, experience, money;
 	private PersonalStorage storage;
