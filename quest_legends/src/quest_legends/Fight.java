@@ -60,7 +60,7 @@ public class Fight implements Color, Vizualization {
 		}
 		for (Player player : players) {
 			Hero hero = (Hero) player.getHero();
-			hero.exitFight(getMonstersLevel());
+			hero.exitFight(getMonstersLevel(), board, player);
 		}
 	}
 

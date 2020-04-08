@@ -13,7 +13,7 @@ public class Player {
 	boolean WinnerStatus;
 	private int totalWins;
 	public int current_row = 0, current_col = 0;
-	private int home_lane = 0;
+	
 	private int id = -1;
 	private Team team;
 	private QuestCharacter hero;
@@ -122,15 +122,7 @@ public class Player {
 		return 0;
 	}
 
-
-	public int getHomeLane() {
-		return home_lane;
-	}
-
-
-	public void setHomeLane(int home_lane) {
-		this.home_lane = home_lane;
-	}
+	
 
 
 	public Team getTeam() {

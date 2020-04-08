@@ -12,6 +12,7 @@ public abstract class QuestCharacter implements Color, CellType {
 	protected boolean dodgedAttack = false;
 	protected String color = GREEN;
 	public int current_row = -1, current_col = -1;
+	private int home_lane = 0;
 	
 	QuestCharacter(String name, int level) {
 		setName(name);
@@ -71,7 +72,13 @@ public abstract class QuestCharacter implements Color, CellType {
 		}
 		return true;
 	}
+	public int getHomeLane() {
+		return home_lane;
+	}
 
+	public void setHomeLane(int home_lane) {
+		this.home_lane = home_lane;
+	}
 	public String toString() {
 		return name ;
 	}

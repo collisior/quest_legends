@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import quest_legends.Fight;
 import quest_legends.PersonalStorage;
+import quest_legends.Player;
+import quest_legends.Quest;
 import quest_legends.Ammunitions.Ammunition;
 import quest_legends.Ammunitions.Armor;
 import quest_legends.Ammunitions.Fists;
@@ -11,9 +13,10 @@ import quest_legends.Ammunitions.Potion;
 import quest_legends.Ammunitions.Spell;
 import quest_legends.Ammunitions.Weapon;
 import quest_legends.GameBoard.CellType;
+import quest_legends.GameBoard.QuestBoard;
 import quest_legends.Helpers.InputHandler;
 
-public class Hero extends QuestCharacter  {
+public class Hero extends QuestCharacter {
 
 	private double strength, dexterity, agility, mana, experience, money;
 	private PersonalStorage storage;
@@ -23,7 +26,7 @@ public class Hero extends QuestCharacter  {
 	private int fightsWon = 0;
 	private ArrayList<Monster> totalDefeatedMonsters = new ArrayList<Monster>();
 	private ArrayList<Monster> defeatedMonstersFight = new ArrayList<Monster>();
-
+	
 	Hero(String name, double mana, double strength, double agility, double dexterity, double money, double experience) {
 		super(name, 1); // default starting level = 1
 		setMana(mana);
@@ -97,6 +100,8 @@ public class Hero extends QuestCharacter  {
 	public void setCurrentAmmunition(Ammunition item) {
 		this.currentAmmunition = item;
 	}
+
+
 
 	/*
 	 * During a round of the fight, when it is the turn of the heroes, the player
@@ -198,11 +203,13 @@ public class Hero extends QuestCharacter  {
 	 * points, then resurrects, and levels up. Total Defeated Monsters in fight
 	 * resets.
 	 */
-	public void exitFight(int monsterLevel) {
+	public void exitFight(int monsterLevel, QuestBoard board, Player player) {
 		if (isAlive()) {
 			setMoney(getMoney() + 100 * monsterLevel);
 			setExperience(getExperience() + 2);
 			setFightsWon(getFightsWon() + 1);
+		} else {
+			board.updateBoard(player, board.rows - 1, Quest.random.nextInt(10) % 2 + getHomeLane());
 		}
 		levelUp();
 		resurrect();
@@ -304,5 +311,5 @@ public class Hero extends QuestCharacter  {
 	public String image() {
 		return null;
 	}
-	
+
 }

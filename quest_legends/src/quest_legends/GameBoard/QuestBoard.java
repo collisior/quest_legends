@@ -82,7 +82,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 * Move player's mark on targeted cell position on the game-board.
 	 */
 	public void updateBoard(Player player, int row, int col) {
-		System.out.println(">>>> updating position");
 		this.getBoard()[player.current_row][player.current_col].removePiece(player.getPiece());
 		board[row][col].placePiece(player.getPiece());
 		player.updatePosition(row, col);
@@ -92,7 +91,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 * Move monster's mark one cell further towards Hero's Nexus.
 	 */
 	public void moveForward(Monster monster) {
-		System.out.println(">>>> forward move Monster");
 		if (isBehindHero(monster.current_row + 1, monster.current_col)) {
 			// stay at the same position. Can't pass behind alive hero.
 		} else {
@@ -136,14 +134,14 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 				System.out.println("Can't teleport to Monster Nexus!");
 			} else if (row_col[0] == rows - 1) {
 				System.out.println("Can't teleport to your Nexus!");
-			} else if (board[player.current_row][player.current_col].getLane() != player.getHomeLane()) {
+			} else if (board[player.current_row][player.current_col].getLane() != player.getHero().getHomeLane()) {
 				// if player is NOT in his own home lane, teleport to his own lane is OK
 				if (isValidMove(player, row_col[0], row_col[1])) {
 					playerInputIsValid = true;
 				}
 			} else { // if player is in his home lane
 				// teleport to his own lane is NOT allowed
-				if (board[row_col[0]][row_col[1]].getLane() == player.getHomeLane()) {
+				if (board[row_col[0]][row_col[1]].getLane() == player.getHero().getHomeLane()) {
 					System.out.println("Can't teleport at your home lane!");
 				} else {
 					// teleport to fellows lane is OK
@@ -266,12 +264,15 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		for (Player player : team.getTeam()) {
 			int random_col = Quest.random.nextInt(10) % 2 + Nexus_col;
 			updateBoard(player, rows - 1, random_col);
-			player.setHomeLane(lane);
+			player.getHero().setHomeLane(lane);
 			Nexus_col += 3;
 			lane++;
 		}
 	}
-
+	
+	public void spawnHero(Player player) {
+		
+	}
 	/*
 	 * Generates new set monsters with team's maximum level. Spread these new
 	 * monsters on their Nexus lanes.
