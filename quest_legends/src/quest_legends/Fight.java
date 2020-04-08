@@ -65,7 +65,7 @@ public class Fight implements Color, Vizualization {
 	}
 
 	/*
-	 * 
+	 * Fight round: 1) Hero makes one attack, 2) Monster makes one attack. Round Ends.
 	 */
 	private void round(Hero hero, Monster monster) {
 		System.out.println(hero.image());

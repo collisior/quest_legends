@@ -2,7 +2,6 @@ package quest_legends.QuestCharacters;
 
 import java.util.ArrayList;
 
-import quest_legends.Fight;
 import quest_legends.PersonalStorage;
 import quest_legends.Player;
 import quest_legends.Quest;
@@ -12,7 +11,6 @@ import quest_legends.Ammunitions.Fists;
 import quest_legends.Ammunitions.Potion;
 import quest_legends.Ammunitions.Spell;
 import quest_legends.Ammunitions.Weapon;
-import quest_legends.GameBoard.CellType;
 import quest_legends.GameBoard.QuestBoard;
 import quest_legends.Helpers.InputHandler;
 
@@ -209,6 +207,7 @@ public class Hero extends QuestCharacter {
 			setExperience(getExperience() + 2);
 			setFightsWon(getFightsWon() + 1);
 		} else {
+			// If hero dies, it spawns at home lane Nexus
 			board.updateBoard(player, board.rows - 1, Quest.random.nextInt(10) % 2 + getHomeLane());
 		}
 		levelUp();
