@@ -58,7 +58,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	public boolean isValidMove(Player player, int row, int col) {
-		System.out.println("is valid: " + row + " " + col);
 		if (boardPositionExists(row, col)) {
 			if (this.getBoard()[row][col].getType() == BLOCKED) {
 				System.out.println(BLOCKED_CELL_MESSAGE);
@@ -67,7 +66,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 				System.out.println(ANOTHER_HERO_OCCUPIED_MESSAGE);
 				return false;
 			} else if (isBehindMonster(row, col)) {
-				System.out.println(">>>>  is behind");
 				System.out.println(BEHIND_MONSTER_MESSAGE);
 				return false;
 			} else {

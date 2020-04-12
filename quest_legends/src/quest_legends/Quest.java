@@ -29,7 +29,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 		currentPlayer = team.getCurrentTeamPlayer();
 		boolean gameStop = false;
-		int monster_spawns = MONSTER_SPAWN_FREQUENCY; //number of rounds until next monsters spawn
+		int monster_spawns = MONSTER_SPAWN_FREQUENCY; // number of rounds until next monsters spawn
 		board.spawnMonsters(team);
 		board.displayBoard(this);
 		while (!gameStop) {
@@ -57,7 +57,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 				board.spawnMonsters(team);
 				monster_spawns = MONSTER_SPAWN_FREQUENCY;
 			}
-			
+
 		}
 	}
 
@@ -96,6 +96,14 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 				break;
 			case 'B': // Go to Nexus - Market
 				Market.enter(currentPlayer);
+				System.out.println("\nHow do you want to make next move?\n[Y] - move from your Nexus. "
+						+ "\n[N] - move from your most recent board position: (" + currentPlayer.current_row + ","
+						+ currentPlayer.current_col + ")");
+				if (InputHandler.YesOrNo()) {
+					currentPlayer.current_col = currentPlayer.getHero().getHomeLane() * 3;
+					currentPlayer.current_row = board.rows - 1;
+				}
+				break;
 			case 'I': // all team heroes information
 				printInfo();
 				break;
