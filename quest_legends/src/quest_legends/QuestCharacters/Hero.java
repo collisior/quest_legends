@@ -169,7 +169,6 @@ public class Hero extends QuestCharacter implements Storage {
 		} else if (currentAmmunition instanceof Armor) {
 			// increase
 		}
-		System.out.println(">>>>>>>>>>>> DAMAGE hero: " + damage);
 		return damage;
 	}
 	

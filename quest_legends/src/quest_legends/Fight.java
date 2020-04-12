@@ -117,7 +117,6 @@ public class Fight implements Color, Vizualization {
 
 	private Hero nextAliveHero() {
 		Player player = playersQueue.pollFirst();
-		System.out.println("playersQueue.size() = "+playersQueue.size());
 		Hero hero = (Hero) player.getHero();
 		if (hero.isAlive()) {
 			playersQueue = GenericDeque.enqueue(playersQueue, player);

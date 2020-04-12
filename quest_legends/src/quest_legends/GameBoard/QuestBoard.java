@@ -194,32 +194,20 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		return fights;
 	}
 
+	/*
+	 * Returns true if row, col position is behind Monster of current lane. Otherwise, false.
+	 */
 	private boolean isBehindMonster(int row, int col) {
-
-		for (int r = rows - 1; r >= 0; r--) {
-			
+		for (int r = rows - 1; r > row; r--) {
 			if (this.getBoard()[r][col].pieceExists(MONSTER_PIECE)) {
-				
+				return true;
 			} else if ((col < cols - 1) && this.getBoard()[r][col + 1].pieceExists(MONSTER_PIECE)) {
-				
+				return true;
 			} else if ((col > 0) && this.getBoard()[r][col - 1].pieceExists(MONSTER_PIECE)) {
-
+				return true;
 			}
 		}
-
-		if (row - 1 < 0 || col - 1 < 0 || col + 1 == cols || row + 1 == rows) {
-			return false;
-		}
-		if (this.getBoard()[row + 1][col].pieceExists(MONSTER_PIECE)) {
-			return true;
-		} else if (this.getBoard()[row + 1][col + 1].pieceExists(MONSTER_PIECE)) {
-			return true;
-		} else if (this.getBoard()[row + 1][col - 1].pieceExists(MONSTER_PIECE)) {
-			return true;
-		} else {
-
-			return false;
-		}
+		return false;
 	}
 
 	private boolean isBehindHero(int row, int col) {
@@ -292,10 +280,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 */
 	public void spawnMonsters(Team team) {
 		ArrayList<Monster> newMonsters = Generator.generateMonsters(team);
-		System.out.println("new monsters spawned");
-		for (Monster monster : newMonsters) {
-			System.out.println("monster: " + monster + " " + monster.id);
-		}
+
 		int laneNum = 0;
 		for (Monster monster : newMonsters) {
 			int random_col = Quest.random.nextInt(10) % 2 + laneNum;

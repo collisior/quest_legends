@@ -63,7 +63,6 @@ public class Monster extends QuestCharacter {
 			finalDamage = getDamage() * spell.skillDeterioration;
 			spell.applyExtraDamage(this);
 		}
-		System.out.println(">>>>>>>>>>>>  DAMAGE monster: " + finalDamage);
 		return finalDamage * 0.4;
 	}
 

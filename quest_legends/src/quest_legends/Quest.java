@@ -22,8 +22,8 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 	public void startGame() {
 		board = new QuestBoard(8, 8);
-		SetupQuestHandler.setupTeam(this);
-//		SetupQuestHandler.quickSetupTeam(this);
+//		SetupQuestHandler.setupTeam(this);
+		SetupQuestHandler.quickSetupTeam(this);
 
 		board.spreadPlayers(team);
 
