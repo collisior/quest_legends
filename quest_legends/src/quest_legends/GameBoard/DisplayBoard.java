@@ -130,7 +130,11 @@ public class DisplayBoard implements Color, CellType, QuestDetails {
 	private static String getMonsterLine(QuestBoard board, int i, int j, Monster monster) {
 		String tmp = "";
 		String monsterID = RED + WHITE_ON_BLACK_BACKGROUND + " M" + monster.id + " " + RESET;
-
+		if(monster.id >= 10) {
+			monsterID = RED + WHITE_ON_BLACK_BACKGROUND + "M" + monster.id + " " + RESET;
+		} else if (monster.id >= 100) {
+			monsterID = RED + WHITE_ON_BLACK_BACKGROUND + "M" + monster.id + "" + RESET;
+		}
 		tmp = ll + BLACK + " " + monsterID + BLACK + "`" + RESET; // Plain
 		if (board.board[i][j].getType() == NEXUS) { // Magic MArket
 			tmp = ll + CYAN + "N" + monsterID + CYAN + "N" + RESET;

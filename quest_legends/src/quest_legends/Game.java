@@ -30,7 +30,7 @@ public abstract class Game {
 	/*
 	 * Update available id.
 	 */
-	public void updateAvailableId() {
+	public static void updateAvailableId() {
 		Game.availableId++;
 	}
 

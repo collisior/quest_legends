@@ -22,8 +22,8 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 	public void startGame() {
 		board = new QuestBoard(8, 8);
-//		SetupQuestHandler.setupTeam(this);
-		SetupQuestHandler.quickSetupTeam(this);
+		SetupQuestHandler.setupTeam(this);
+//		SetupQuestHandler.quickSetupTeam(this);
 
 		board.spreadPlayers(team);
 
@@ -52,7 +52,6 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 				System.out.println("All Fights of this round ended.");
 			}
 			board.moveAllMonsters();
-			System.out.println("monsters in this board "+board.aliveMonsters.size());
 			monster_spawns--;
 			if (monster_spawns == 0) {
 				board.spawnMonsters(team);

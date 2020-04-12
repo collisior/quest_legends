@@ -129,7 +129,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 		while (playerInputIsValid == false) {
 			int[] row_col = getBoardPositionFromUser(); // get teleport position
-			
+
 			if (row_col[0] == 0) {
 				System.out.println("Can't teleport to Monster Nexus!");
 			} else if (row_col[0] == rows - 1) {
@@ -196,6 +196,17 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 	private boolean isBehindMonster(int row, int col) {
 
+		for (int r = rows - 1; r >= 0; r--) {
+			
+			if (this.getBoard()[r][col].pieceExists(MONSTER_PIECE)) {
+				
+			} else if ((col < cols - 1) && this.getBoard()[r][col + 1].pieceExists(MONSTER_PIECE)) {
+				
+			} else if ((col > 0) && this.getBoard()[r][col - 1].pieceExists(MONSTER_PIECE)) {
+
+			}
+		}
+
 		if (row - 1 < 0 || col - 1 < 0 || col + 1 == cols || row + 1 == rows) {
 			return false;
 		}
@@ -206,6 +217,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		} else if (this.getBoard()[row + 1][col - 1].pieceExists(MONSTER_PIECE)) {
 			return true;
 		} else {
+
 			return false;
 		}
 	}
@@ -269,10 +281,11 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			lane++;
 		}
 	}
-	
+
 	public void spawnHero(Player player) {
-		
+
 	}
+
 	/*
 	 * Generates new set monsters with team's maximum level. Spread these new
 	 * monsters on their Nexus lanes.
@@ -280,6 +293,9 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	public void spawnMonsters(Team team) {
 		ArrayList<Monster> newMonsters = Generator.generateMonsters(team);
 		System.out.println("new monsters spawned");
+		for (Monster monster : newMonsters) {
+			System.out.println("monster: " + monster + " " + monster.id);
+		}
 		int laneNum = 0;
 		for (Monster monster : newMonsters) {
 			int random_col = Quest.random.nextInt(10) % 2 + laneNum;

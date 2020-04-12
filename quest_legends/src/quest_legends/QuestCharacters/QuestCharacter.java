@@ -1,11 +1,10 @@
 package quest_legends.QuestCharacters;
 
-import quest_legends.PersonalStorage;
 import quest_legends.Quest;
 import quest_legends.GameBoard.CellType;
 import quest_legends.Helpers.Color;
 
-public abstract class QuestCharacter implements Color, CellType {
+public abstract class QuestCharacter implements Color, CellType, DodgeAttack, Damage {
 	protected String name;
 	protected double hp;
 	protected int level;
@@ -98,21 +97,11 @@ public abstract class QuestCharacter implements Color, CellType {
 		return false;
 	}
 
-	protected abstract double getDodgeChance();
-	/*
-	 * Return damage calculated that must be caused on the passed character.
-	 */
-	protected abstract double damageCalculation(QuestCharacter character);
-
 	public void applyDamage(double damage) {	
 		setHp(getHp() - damage);
 	}
 
 	protected abstract void upgradeSkills();
-
-	protected abstract PersonalStorage getStorage();
-
-	protected abstract void showStorage();
 
 	protected abstract void levelUp();
 	

@@ -31,6 +31,9 @@ public class Generator implements QuestDetails {
 				monster = generateMonster((int) Math.round(highestHeroLevel));
 			}
 			listMonsters.add(monster);
+			monster.id = Quest.getAvailableId();
+			Quest.updateAvailableId();
+			System.out.println("Monster: " + monster.id);
 		}
 		return listMonsters;
 	}
@@ -55,6 +58,7 @@ public class Generator implements QuestDetails {
 			monster = new Spirit(monsterData[0], monsterDataInt[0], monsterDataInt[1], monsterDataInt[2],
 					monsterDataInt[3]);
 		}
+		
 		return monster;
 	}
 

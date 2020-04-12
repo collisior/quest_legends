@@ -8,7 +8,7 @@ import quest_legends.Ammunitions.Spell;
 public class Monster extends QuestCharacter {
 
 	private double damage, defense, dodgeChance;
-	private double damageReducer = 0.8;
+	private double dodgeReducer = 0.8;
 	public int id;
 
 	public Monster(String name, int level, double damage, double defense, double dodgeChance) {
@@ -37,7 +37,7 @@ public class Monster extends QuestCharacter {
 
 	@Override
 	public double getDodgeChance() {
-		return dodgeChance * damageReducer;
+		return dodgeChance * dodgeReducer;
 	}
 
 	public void setDodgeChance(double dodgeChance) {
@@ -49,21 +49,22 @@ public class Monster extends QuestCharacter {
 	/*
 	 * Calculates Final Damage this Monster will cause to given Hero. 
 	 */
-	public double damageCalculation(Hero hero) {
+	@Override
+	public double damageCalculation(QuestCharacter character) {
 		double finalDamage = getDamage();
+		Hero hero = (Hero) character;
 		if (hero.getCurrentAmmunition() instanceof Armor) {
 			Armor armor = (Armor) hero.getCurrentAmmunition();
 			if ((getDamage() - armor.getDamageReduction()) > 0) {
 				finalDamage = getDamage() - armor.getDamageReduction();
-				System.out.print("\n>>>>>>>>>>>> ARMOR " + finalDamage);
 			}
 		} else if ((dodgedAttack == false) && (hero.getCurrentAmmunition() instanceof Spell)) {
 			Spell spell = (Spell) hero.getCurrentAmmunition();
 			finalDamage = getDamage() * spell.skillDeterioration;
 			spell.applyExtraDamage(this);
 		}
-
-		return finalDamage;
+		System.out.println(">>>>>>>>>>>>  DAMAGE monster: " + finalDamage);
+		return finalDamage * 0.4;
 	}
 
 	@Override
@@ -77,26 +78,8 @@ public class Monster extends QuestCharacter {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	protected PersonalStorage getStorage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void showStorage() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public String displayDetails() {
 		return "Name: " + name + "\nHp: " + hp + "\nLevel: " + level + "\nDefense: " + defense + "\nDamage: " + damage;
-	}
-
-	@Override
-	protected double damageCalculation(QuestCharacter character) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -110,5 +93,4 @@ public class Monster extends QuestCharacter {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

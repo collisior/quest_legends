@@ -14,7 +14,7 @@ import quest_legends.Ammunitions.Weapon;
 import quest_legends.GameBoard.QuestBoard;
 import quest_legends.Helpers.InputHandler;
 
-public class Hero extends QuestCharacter {
+public class Hero extends QuestCharacter implements Storage {
 
 	private double strength, dexterity, agility, mana, experience, money;
 	private PersonalStorage storage;
@@ -169,17 +169,21 @@ public class Hero extends QuestCharacter {
 		} else if (currentAmmunition instanceof Armor) {
 			// increase
 		}
+		System.out.println(">>>>>>>>>>>> DAMAGE hero: " + damage);
 		return damage;
 	}
-
+	
+	@Override
 	public void showStorage() {
 		storage.showStorage();
 	}
-
+	
+	@Override
 	public PersonalStorage getStorage() {
 		return storage;
 	}
-
+	
+	@Override
 	public void setStorage(PersonalStorage storage) {
 		this.storage = storage;
 	}
@@ -208,7 +212,7 @@ public class Hero extends QuestCharacter {
 			setFightsWon(getFightsWon() + 1);
 		} else {
 			// If hero dies, it spawns at home lane Nexus
-			board.updateBoard(player, board.rows - 1, Quest.random.nextInt(10) % 2 + getHomeLane());
+			board.updateBoard(player, board.rows - 1, Quest.random.nextInt(10) % 2 + getHomeLane()*3);
 		}
 		levelUp();
 		resurrect();

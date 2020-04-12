@@ -21,7 +21,6 @@ public class Fight implements Color, Vizualization {
 		this.monster = monster;
 		this.players = players;
 		this.playersQueue = GenericDeque.setQueue(players);
-
 	}
 
 	public void startFight() {
@@ -91,7 +90,6 @@ public class Fight implements Color, Vizualization {
 		hero.chooseCurrentAmmunition();
 		System.out.println("Your attack: " + hero.getCurrentAmmunition() + "\n" + hero.getCurrentAmmunition().image());
 		double damage = hero.damageCalculation(monster);
-
 		if (monster.dodgeAttack()) {
 			// monster escapes
 			System.out.println(GREEN + "Oh no... Monster dodged your attack!\n\n" + RESET);
@@ -122,10 +120,9 @@ public class Fight implements Color, Vizualization {
 		System.out.println("playersQueue.size() = "+playersQueue.size());
 		Hero hero = (Hero) player.getHero();
 		if (hero.isAlive()) {
-			players.add(player);
+			playersQueue = GenericDeque.enqueue(playersQueue, player);
 			return hero;
 		}
-		playersQueue = GenericDeque.enqueue(playersQueue, player);
 		return nextAliveHero();
 	}
 

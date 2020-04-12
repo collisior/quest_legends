@@ -33,8 +33,6 @@ public class Main implements Vizualization {
 //		game.board.getBoard()[1][1].placePiece(new Piece('@'));
 //		game.board.displayBoard(game);
 		
-
-		
 	}
 	
 	
