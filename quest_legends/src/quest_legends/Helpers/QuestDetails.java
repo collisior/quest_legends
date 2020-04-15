@@ -21,7 +21,7 @@ public interface QuestDetails {
 
 	public final static int TEAM_CAPACITY = 3;
 	public final static int END_LEVEL = 10; // max level number to reach
-	public final static int MONSTER_SPAWN_FREQUENCY = 8; // the number of rounds after which new set of monsters occur
+	public final static int MONSTER_SPAWN_FREQUENCY = 4; // the number of rounds after which new set of monsters occur
 
 	public static String getHeroFilename(char c) {
 		String filename = "";

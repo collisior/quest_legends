@@ -5,7 +5,6 @@ import java.util.Random;
 
 import quest_legends.GameBoard.QuestBoard;
 import quest_legends.Helpers.Color;
-import quest_legends.Helpers.GenericMethods;
 import quest_legends.Helpers.InputHandler;
 import quest_legends.Helpers.QuestDetails;
 import quest_legends.Helpers.Vizualization;
@@ -23,20 +22,28 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 	public void startGame() {
 		board = new QuestBoard(this, 8, 8);
 //		SetupQuestHandler.setupTeam(this);
-		System.out.println("000");
 		SetupQuestHandler.quickSetupTeam(this);
-		System.out.println("111");
 		board.spreadPlayers(team);
 
 		currentPlayer = team.getCurrentTeamPlayer();
 		boolean gameStop = false;
 		int monster_spawns = MONSTER_SPAWN_FREQUENCY; // number of rounds until next monsters spawn
 		board.spawnMonsters(team);
-		System.out.println("222" + board.getRandomCell());
 		board.display.showBoard();
-		System.out.println("333");
 		while (!gameStop) {
-
+			board.moveAllMonsters();
+			
+			if (!gameStop) {
+				// check monsters nearby. start fight if monsters are in fight radius
+				ArrayList<Fight> fights = board.getFights(team);
+//				System.out.println("Total fights in this round = " + fights.size());
+				for (Fight fight : fights) {
+					fight.startFight();
+					System.out.println("Fight ended");
+				}
+				System.out.println("All Fights of this round ended.");
+			}
+			
 			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
 				currentPlayer = team.getNextTeamPlayer();
 				makeMove();
@@ -44,17 +51,9 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					gameStop = true;
 				}
 			}
-			if (!gameStop) {
-				// check monsters nearby. start fight if monsters are in fight radius
-				ArrayList<Fight> fights = board.getFights(team);
-				System.out.println("Total fights in this round = " + fights.size());
-				for (Fight fight : fights) {
-					fight.startFight();
-					System.out.println("Fight ended");
-				}
-				System.out.println("All Fights of this round ended.");
-			}
-			board.moveAllMonsters();
+			
+			
+			
 			monster_spawns--;
 			if (monster_spawns == 0) {
 				board.spawnMonsters(team);

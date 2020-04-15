@@ -64,6 +64,9 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	public boolean isValidMove(Player player, int row, int col) {
+		 System.out.println("Alive");
+		for(Monster monster: aliveMonsters) System.out.println(monster);
+		
 		if (boardPositionExists(row, col)) {
 			if (this.getBoard()[row][col].getType() == BLOCKED) {
 				System.out.println(BLOCKED_CELL_MESSAGE);
@@ -199,6 +202,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 				return true;
 			}
 		}
+		System.out.println("NOT behind Monster!!!");
 		return false;
 	}
 
@@ -281,11 +285,11 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 */
 	public String getRandomCell() {
 		double x = Math.random();
-		if (x < 0.2) {
+		if (x < 0.4) {
 			return PLAIN; 
-		} else if (x < 0.4) {
-			return BUSH; 
 		} else if (x < 0.6) {
+			return BUSH; 
+		} else if (x < 0.8) {
 			return KOULOU; 
 		} else {
 			return CAVE;
