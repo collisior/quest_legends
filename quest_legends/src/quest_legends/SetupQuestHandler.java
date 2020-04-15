@@ -25,7 +25,7 @@ public class SetupQuestHandler implements QuestDetails, Color {
 			player.setHero(hero);
 			player.setPiece(HERO_PIECE);
 			player.setTeam(quest.team);
-			System.out.println(player + " your Hero is " + player.getHero());
+			System.out.println(RED + player + " your Hero is " + player.getHero() + RESET);
 		}
 
 		quest.addTeam(quest.team);

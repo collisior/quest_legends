@@ -13,11 +13,9 @@ public class DisplayBoardQuest extends DisplayBoard implements Color, CellType, 
 	
 
 	DisplayBoardQuest(QuestBoard board, Quest quest) {
-		
 		super(board);
 		this.quest = quest;
 		board = quest.board;
-		System.out.println("Display Board created");
 	}
 
 	/*
@@ -132,7 +130,6 @@ public class DisplayBoardQuest extends DisplayBoard implements Color, CellType, 
 		if (quest.board.getBoard()[row][col].pieceExists(MONSTER_PIECE)) {
 			for (Monster monster : quest.board.aliveMonsters) {
 				if ((monster.current_col == col) && (monster.current_row == row)) {
-					System.out.println( "Monster is here : " + row + " " + col);
 					return monster;
 				}
 			}

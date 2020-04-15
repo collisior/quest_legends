@@ -56,8 +56,6 @@ public class Fight implements Color, Vizualization, QuestDetails {
 				hero.setMoney(hero.getMoney() / 2);
 			}
 			System.out.println(YOU + "\n" + LOST + "\n" + FIGHT);
-		} else {
-			System.out.println(VICTORY + "\n" + MONSTERS + "\n" + DEFEATED);
 		}
 		for (Player player : players) {
 			Hero hero = (Hero) player.getHero();
@@ -71,8 +69,7 @@ public class Fight implements Color, Vizualization, QuestDetails {
 	}
 
 	/*
-	 * Fight round: 1) Hero makes one attack, 2) Monster makes one attack. Round
-	 * Ends.
+	 * Fight round: 1) Hero makes one attack, 2) Monster makes one attack. Round Ends.
 	 */
 	private void round(Hero hero) {
 		System.out.println(hero.image());
@@ -136,10 +133,10 @@ public class Fight implements Color, Vizualization, QuestDetails {
 	private void showWinner() {
 		if ((totalPlayersHpValue() > 0) && (monster.getHp() <= 0)) {
 			((TeamQuest) players.get(0).getTeam()).addFightsWon();
-			System.out.println("Team wins the fight!");
+			System.out.println("Players wins the fight!");
 		} else {
 			((TeamQuest) players.get(0).getTeam()).addFightsLost();
-			System.out.println("Monsters wins the fight!");
+			System.out.println("Monster won the fight!");
 		}
 	}
 
@@ -179,22 +176,21 @@ public class Fight implements Color, Vizualization, QuestDetails {
 
 	// print statistic of heros and monsters
 	public void printStatistics(Hero hero) {
-		System.out.println("---------------------------------------------------------------------------------");
+		System.out.println("----------------------------------------------------------");
 		System.out.println("Heroes Statistics:");
-		System.out.println("---------------------------------------------------------------------------------");
+		System.out.println("----------------------------------------------------------");
 		for(Player player : players) {
-			System.out.println("Player " + "H"+player.getId() + ":");
-			System.out.println("Name: " + hero.getName() + "\tHp:" + hero.getHp() + "\tMana:" + hero.getMana());
+			System.out.println(RED + "Player " + "H"+player.getId() + ":" + RESET);
+			System.out.println("Name: " + hero.getName() + "\nHp:" + (int) hero.getHp() + "nMana:" + hero.getMana());
 			System.out.println();
 		}
 		
-		System.out.println("---------------------------------------------------------------------------------");
+		System.out.println("----------------------------------------------------------");
 		System.out.println("Monsters Statistics:");
-		System.out.println("---------------------------------------------------------------------------------");
-		System.out.println("Monster " + "M" + monster.id + ":");
-		System.out.println("Name: " + monster.getName() + "\tLevel: " + monster.getLevel() + "\nHp:"
-				+ monster.getHp() + "\tDamage:" + monster.getDamage() + "\tDefense:" + monster.getDefense());
-		System.out.println("----------------------------------------------------");
+		System.out.println("----------------------------------------------------------");
+		System.out.println(RED+"Monster " + "M" + monster.id + ":"+RESET);
+		System.out.println(monster.displayDetails());
+		System.out.println("----------------------------------------------------------");
 	}
 
 }

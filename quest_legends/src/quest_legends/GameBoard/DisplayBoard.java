@@ -6,7 +6,6 @@ public abstract class DisplayBoard {
 	Board board = null;
 
 	DisplayBoard(Board board) {
-		System.out.println("Display Board created");
 		this.board = board;
 	}
 

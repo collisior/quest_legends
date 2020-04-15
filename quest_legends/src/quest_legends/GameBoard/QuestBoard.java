@@ -33,7 +33,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	@Override
 	public void setDisplay(Game game) {
 		this.display = new DisplayBoardQuest(this, (Quest) game);
-		System.out.println("Display Board created 00");
 	}
 
 	/*
@@ -64,9 +63,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	public boolean isValidMove(Player player, int row, int col) {
-		 System.out.println("Alive");
-		for(Monster monster: aliveMonsters) System.out.println(monster);
-		
+
 		if (boardPositionExists(row, col)) {
 			if (this.getBoard()[row][col].getType() == BLOCKED) {
 				System.out.println(BLOCKED_CELL_MESSAGE);
@@ -110,6 +107,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 	public void moveAllMonsters() {
 		for (Monster monster : aliveMonsters) {
+//			if()
 			moveForward(monster);
 		}
 	}
@@ -126,9 +124,9 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			int[] row_col = getBoardPositionFromUser(); // get teleport position
 
 			if (row_col[0] == 0) {
-				System.out.println("Can't teleport to Monster Nexus!");
+				System.out.println(RED+"Can't teleport to Monster Nexus!"+RESET);
 			} else if (row_col[0] == rows - 1) {
-				System.out.println("Can't teleport to your Nexus!");
+				System.out.println(RED+"Can't teleport to your Nexus!"+RESET);
 			} else if (board[player.current_row][player.current_col].getLane() != player.getHero().getHomeLane()) {
 				// if player is NOT in his own home lane, teleport to his own lane is OK
 				if (isValidMove(player, row_col[0], row_col[1])) {
@@ -137,7 +135,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			} else { // if player is in his home lane
 				// teleport to his own lane is NOT allowed
 				if (board[row_col[0]][row_col[1]].getLane() == player.getHero().getHomeLane()) {
-					System.out.println("Can't teleport at your home lane!");
+					System.out.println(RED+"Can't teleport at your home lane!"+RESET);
 				} else {
 					// teleport to fellows lane is OK
 					if (isValidMove(player, row_col[0], row_col[1])) {
@@ -202,7 +200,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 				return true;
 			}
 		}
-		System.out.println("NOT behind Monster!!!");
 		return false;
 	}
 

@@ -21,8 +21,8 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 	public void startGame() {
 		board = new QuestBoard(this, 8, 8);
-//		SetupQuestHandler.setupTeam(this);
-		SetupQuestHandler.quickSetupTeam(this);
+		SetupQuestHandler.setupTeam(this);
+//		SetupQuestHandler.quickSetupTeam(this);
 		board.spreadPlayers(team);
 
 		currentPlayer = team.getCurrentTeamPlayer();
@@ -31,19 +31,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 		board.spawnMonsters(team);
 		board.display.showBoard();
 		while (!gameStop) {
-			board.moveAllMonsters();
-			
-			if (!gameStop) {
-				// check monsters nearby. start fight if monsters are in fight radius
-				ArrayList<Fight> fights = board.getFights(team);
-//				System.out.println("Total fights in this round = " + fights.size());
-				for (Fight fight : fights) {
-					fight.startFight();
-					System.out.println("Fight ended");
-				}
-				System.out.println("All Fights of this round ended.");
-			}
-			
+
 			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
 				currentPlayer = team.getNextTeamPlayer();
 				makeMove();
@@ -51,9 +39,19 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					gameStop = true;
 				}
 			}
-			
-			
-			
+
+			if (!gameStop) {
+				// check monsters nearby. start fight if monsters are in fight radius
+				ArrayList<Fight> fights = board.getFights(team);
+//				System.out.println("Total fights in this round = " + fights.size());
+				for (Fight fight : fights) {
+					fight.startFight();
+					System.out.println(RED + "Next fight..." + RESET);
+				}
+			}
+
+			board.moveAllMonsters();
+
 			monster_spawns--;
 			if (monster_spawns == 0) {
 				board.spawnMonsters(team);
@@ -124,8 +122,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 			player.getHero().information();
 			System.out.println("");
 		}
-		String s = "-----------TEAM OVERALL-------------\n" + "\tTotal Fights won: " + ((TeamQuest) team).getFightsWon()
-				+ "\n\tTotal Fights lost:" + ((TeamQuest) team).getFightsLost()
+		String s = "-----------TEAM OVERALL-------------\n" + "\tTotal Monsters defeated: " + board.deadMonsters.size()
 				+ "\n-------------------------------------\n";
 		System.out.println(s);
 	}
