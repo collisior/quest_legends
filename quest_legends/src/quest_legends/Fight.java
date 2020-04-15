@@ -176,7 +176,7 @@ public class Fight implements Color, Vizualization, QuestDetails {
 		System.out.println("----------------------------------------------------------");
 		for(Player player : players) {
 			System.out.println(RED + "Player " + "H"+player.getId() + ":" + RESET);
-			System.out.println("Name: " + hero.getName() + "\nHp:  " + (int) hero.getHp() + "\nMana: " + hero.getMana());
+			System.out.println("Name: " + hero.getName() + "\nHp:    " + (int) hero.getHp() + "\nMana: " + hero.getMana());
 			System.out.println();
 		}
 
