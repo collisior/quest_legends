@@ -78,7 +78,7 @@ public class Monster extends QuestCharacter {
 	}
 
 	public String displayDetails() {
-		return "Name: " + name + "\nHp: " + hp + "\nLevel: " + level + "\nDefense: " + defense + "\nDamage: " + damage;
+		return "Name:    " + name + "\nHp:      " + hp + "\nLevel:   " + level + "\nDefense: " + defense + "\nDamage:  " + damage;
 	}
 
 	@Override

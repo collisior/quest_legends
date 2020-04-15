@@ -20,6 +20,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 	public ArrayList<Monster> aliveMonsters = new ArrayList<Monster>();
 	public ArrayList<Monster> deadMonsters = new ArrayList<Monster>();
+
 	/*
 	 * Constructor to initialize Quest board (dimensions retrieved from user)
 	 */
@@ -75,6 +76,11 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 				System.out.println(BEHIND_MONSTER_MESSAGE);
 				return false;
 			} else {
+				if (row == rows - 1 && this.getBoard()[row][col].getType() == NEXUS) {
+					updateBoard(player, row, col);
+					System.out.println(RED + "You are still in your Nexus!" + RESET);
+					return false;
+				}
 				updateBoard(player, row, col);
 				return true;
 			}
@@ -89,7 +95,10 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		this.getBoard()[player.current_row][player.current_col].removePiece(player.getPiece());
 		board[row][col].placePiece(player.getPiece());
 		player.updatePosition(row, col);
-		boostSkills((Hero) player.getHero());	
+		boostSkills((Hero) player.getHero());
+		if (comingFight(player)) {
+			System.out.println(CYAN + player + ", get ready for the fight!" + RESET);
+		}
 	}
 
 	/*
@@ -124,9 +133,9 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			int[] row_col = getBoardPositionFromUser(); // get teleport position
 
 			if (row_col[0] == 0) {
-				System.out.println(RED+"Can't teleport to Monster Nexus!"+RESET);
+				System.out.println(RED + "Can't teleport to Monster Nexus!" + RESET);
 			} else if (row_col[0] == rows - 1) {
-				System.out.println(RED+"Can't teleport to your Nexus!"+RESET);
+				System.out.println(RED + "Can't teleport to your Nexus!" + RESET);
 			} else if (board[player.current_row][player.current_col].getLane() != player.getHero().getHomeLane()) {
 				// if player is NOT in his own home lane, teleport to his own lane is OK
 				if (isValidMove(player, row_col[0], row_col[1])) {
@@ -135,7 +144,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			} else { // if player is in his home lane
 				// teleport to his own lane is NOT allowed
 				if (board[row_col[0]][row_col[1]].getLane() == player.getHero().getHomeLane()) {
-					System.out.println(RED+"Can't teleport at your home lane!"+RESET);
+					System.out.println(RED + "Can't teleport at your home lane!" + RESET);
 				} else {
 					// teleport to fellows lane is OK
 					if (isValidMove(player, row_col[0], row_col[1])) {
@@ -152,12 +161,8 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	public ArrayList<Player> fightRadius(Monster monster, ArrayList<Player> tmpTeam) {
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (Player player : tmpTeam) {
-			if (player.current_row == monster.current_row) { // if on the same row
-				if (player.current_col == monster.current_col || player.current_col - 1 == monster.current_col
-						|| player.current_col + 1 == monster.current_col) {
-					players.add(player);
-				}
-			} else if (player.current_row == monster.current_row + 1) { // if on neighboring row
+			if ((player.current_row == monster.current_row) || (player.current_row == monster.current_row + 1)
+			|| (player.current_row == monster.current_row + 0)) { 
 				if (player.current_col == monster.current_col || player.current_col - 1 == monster.current_col
 						|| player.current_col + 1 == monster.current_col) {
 					players.add(player);
@@ -165,6 +170,23 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			}
 		}
 		return players;
+	}
+
+	/*
+	 * 
+	 */
+	public boolean comingFight(Player player) {
+		for (Monster monster : aliveMonsters) {
+			if ((player.current_row == monster.current_row) || (player.current_row == monster.current_row + 1)
+					|| (player.current_row == monster.current_row - 1)) { // if on the same row
+				if (player.current_col == monster.current_col || player.current_col - 1 == monster.current_col
+						|| player.current_col + 1 == monster.current_col) {
+					return true;
+				}
+			}
+		}
+		return false;
+
 	}
 
 	/*
@@ -188,7 +210,8 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	/*
-	 * Returns true if row, col position is behind Monster of current lane. Otherwise, false.
+	 * Returns true if row, col position is behind Monster of current lane.
+	 * Otherwise, false.
 	 */
 	private boolean isBehindMonster(int row, int col) {
 		for (int r = rows - 1; r > row; r--) {
@@ -238,8 +261,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		}
 	}
 
-
-
 	/*
 	 * Spread p;ayers on their Nexus area.
 	 */
@@ -276,38 +297,37 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			aliveMonsters.add(monster);
 		}
 	}
-	
+
 	/*
 	 * Generate random cell type, return this type.
 	 */
 	public String getRandomCell() {
 		double x = Math.random();
 		if (x < 0.4) {
-			return PLAIN; 
+			return PLAIN;
 		} else if (x < 0.6) {
-			return BUSH; 
+			return BUSH;
 		} else if (x < 0.8) {
-			return KOULOU; 
+			return KOULOU;
 		} else {
 			return CAVE;
 		}
 	}
-	
+
 	/*
 	 * Handle cell type (boost hero's skills)
 	 */
 	public void boostSkills(Hero hero) {
-		
+
 		if (getBoard()[hero.current_row][hero.current_col].getType() == BUSH) {
-			hero.setDexterity(hero.getDexterity()*1.15);
+			hero.setDexterity(hero.getDexterity() * 1.15);
 		} else if (getBoard()[hero.current_row][hero.current_col].getType() == KOULOU) {
-			hero.setStrength(hero.getStrength()*1.15);
+			hero.setStrength(hero.getStrength() * 1.15);
 		} else if (getBoard()[hero.current_row][hero.current_col].getType() == CAVE) {
-			hero.setAgility(hero.getAgility()*1.15);
+			hero.setAgility(hero.getAgility() * 1.15);
 		} else {
-			
+
 		}
 	}
-
 
 }

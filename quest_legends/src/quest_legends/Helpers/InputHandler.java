@@ -97,7 +97,7 @@ public class InputHandler {
 		}
 		return c;
 	}
-	
+
 	/*
 	 * Returns Character input if exists in given character list
 	 */
@@ -128,7 +128,7 @@ public class InputHandler {
 	public static int[] getTwoIntegers() {
 		int[] nn = new int[] { -1, -1 };
 		boolean playerInputIsValid = false;
-		
+
 		while (playerInputIsValid == false) {
 			Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s+]");
 			System.out.print("Enter two integers (separated by comma or whitespace): ");
@@ -196,4 +196,15 @@ public class InputHandler {
 		}
 		return input;
 	}
+
+	public static void pressAnything() {
+		System.out.println("\n\nPress any key to START...");
+		try {
+			System.in.read();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }

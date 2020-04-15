@@ -11,12 +11,12 @@ import quest_legends.QuestCharacters.Monster;
 import quest_legends.QuestCharacters.Spirit;
 
 public class Generator implements QuestDetails {
-	
+
 	public static String getRandomMonsterFilename() {
-		int randomNum = Quest.random.nextInt(monstersFilenames.length-1);
+		int randomNum = Quest.random.nextInt(monstersFilenames.length);
 		return monstersFilenames[randomNum];
 	}
-	
+
 	public static ArrayList<Monster> generateMonsters(Team team) {
 		ArrayList<Monster> listMonsters = new ArrayList<Monster>();
 		int highestHeroLevel = 0;
@@ -33,13 +33,13 @@ public class Generator implements QuestDetails {
 			listMonsters.add(monster);
 			monster.id = Quest.getAvailableId();
 			Quest.updateAvailableId();
-			System.out.println("Monster: " + monster.id);
 		}
 		return listMonsters;
 	}
 
 	private static Monster generateMonster(int highestHeroLevel) {
 		String filename = getRandomMonsterFilename();
+
 		String[] monsterData = getRandomMonsterFrom(filename, highestHeroLevel);
 		if (monsterData == null) {
 			return null;
@@ -58,7 +58,7 @@ public class Generator implements QuestDetails {
 			monster = new Spirit(monsterData[0], monsterDataInt[0], monsterDataInt[1], monsterDataInt[2],
 					monsterDataInt[3]);
 		}
-		
+
 		return monster;
 	}
 

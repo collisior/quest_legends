@@ -268,8 +268,11 @@ public interface Vizualization {
 	public static final String GREEN1 = "\u001B[32m";
 	public static final String CYAN1 = "\u001B[36m";
 	public static final String RED1 = "\u001B[31m";
-	public static final String PURPLE1 = "\u001B[35m";
+	public static final String PINK1 = "\u001B[35m";
+	public static final String PURPLE1 = "\u001B[34m";
 	public static final String RESET1 = "\u001B[0m";
+	public static final String YELLOW1 = "\u001B[33m";
+	public static final String BLACK1 = "\u001B[30m";
 	public static final String BLOCKED_CELL_MESSAGE = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n" + RED1
 			+ "   You shall not pass into this cell! Try another move.\n" + RESET1
 			+ "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
@@ -280,21 +283,35 @@ public interface Vizualization {
 			+ "   You can't pass behind a monster without killing it! Try another move.\n" + RESET1
 			+ "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
 	public static final String BOARD_CELLS_INFO = 
-			"Quest Board Cell Inormation: \n\n" 
-			+ "Non-accessible cell:         Magic Market Cell:          Monster Cell: \n"  
-			+GREEN1+"    \\\\\\\\\\\\"+RESET1+CYAN1+"                       /MM\\  "+RESET1+PURPLE1+"                    ******\n" 
-			+GREEN1+"    //////         "+RESET1+CYAN1+"             /''''\\   "+RESET1+PURPLE1+"                  ******\n "
-			+GREEN1+"   \\\\\\\\\\\\    "+RESET1+CYAN1+"                  L◻◻◻◻⅃   "+RESET1+PURPLE1+"                  ******\n\n" + RESET1;
-	
+			"Quest Board Cell Details: \n\n" 
+					+ "Blocked:   Koulou:    Cave:      Bush:     Nexus:\n"  
+					+BLACK1+"\\\\\\\\\\\\"+PURPLE1+"     KKKKKK"+YELLOW1+"     CCCCCC"+GREEN1+"     BBBBBB" +CYAN1+"    NNNNNN\n" 
+					+BLACK1+"//////" + PURPLE1 +   "     KKKKKK"+YELLOW1+"     CCCCCC"+GREEN1+"     BBBBBB"+CYAN1+"    NNNNNN\n" 
+					+BLACK1+"\\\\\\\\\\\\"+PURPLE1+"     KKKKKK"+YELLOW1+"     CCCCCC"+GREEN1+"     BBBBBB" +CYAN1+"    NNNNNN\n" + RESET1;
 			
+	public static final String FIGHT_RADIUS_INFO = "\n\nFight radius details:\n\nThe fight will automatically begin if hero-monster is in one of following positions:\n"
+			+ "\n+-------+ \t +-------+ \t +-------+ \t +-------+ \t +-------+"
+			+ "\n| M | H | \t | M |   | \t | M |   | \t |   | M | \t | MH|   |"
+			+ "\n|-------| \t |-------| \t |-------| \t |-------| \t |-------|"
+			+ "\n|   |   | \t | H |   | \t |   | H | \t | H |   | \t |   |   |"
+			+ "\n+-------+ \t +-------+ \t +-------+ \t +-------+ \t +-------+"
+			+ "\n\n ^adjacent row - column, diagonally apart, or in the same cell";
 	public static void main(String[] args) {
 		String s = 
 				"Quest Board Cell Details: \n\n" 
-				+ "Non-accessible cell:         Magic Market Cell:          Monster Cell: \n"  
-				+GREEN1+"    \\\\\\\\\\\\"+RESET1+CYAN1+"                       /MM\\  "+RESET1+PURPLE1+"                    ******\n" 
-				+GREEN1+"    //////         "+RESET1+CYAN1+"             /''''\\   "+RESET1+PURPLE1+"                  ******\n "
-				+GREEN1+"   \\\\\\\\\\\\    "+RESET1+CYAN1+"                  L◻◻◻◻⅃   "+RESET1+PURPLE1+"                  ******" + RESET1;
-		System.out.println(s);		
+				+ "Blocked:   Koulou:    Cave:      Bush:     Nexus:\n"  
+				+BLACK1+"\\\\\\\\\\\\"+PURPLE1+"     KKKKKK"+YELLOW1+"     CCCCCC"+GREEN1+"     BBBBBB" +CYAN1+"    NNNNNN\n" 
+				+BLACK1+"//////" + PURPLE1 +   "     KKKKKK"+YELLOW1+"     CCCCCC"+GREEN1+"     BBBBBB"+CYAN1+"    NNNNNN\n" 
+				+BLACK1+"\\\\\\\\\\\\"+PURPLE1+"     KKKKKK"+YELLOW1+"     CCCCCC"+GREEN1+"     BBBBBB" +CYAN1+"    NNNNNN\n" + RESET1;
+		
+		String fightRadius = "\n\nFight radius details:\n\nThe fight will automatically begin if hero-monster is in one of following positions:\n"
+				+ "\n+-------+ \t +-------+ \t +-------+ \t +-------+ \t +-------+"
+				+ "\n| M | H | \t | M |   | \t | M |   | \t |   | M | \t | MH|   |"
+				+ "\n|-------| \t |-------| \t |-------| \t |-------| \t |-------|"
+				+ "\n|   |   | \t | H |   | \t |   | H | \t | H |   | \t |   |   |"
+				+ "\n+-------+ \t +-------+ \t +-------+ \t +-------+ \t +-------+"
+				+ "\n\n ^adjacent row - column, diagonally apart, or in the same cell";
+		System.out.println(s + fightRadius);		
 	}
 	public static void fightCountdown() {
 		Timer timer = new Timer();

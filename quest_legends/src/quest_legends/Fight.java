@@ -61,11 +61,6 @@ public class Fight implements Color, Vizualization, QuestDetails {
 			Hero hero = (Hero) player.getHero();
 			hero.exitFight(getMonstersLevel(), board, player);
 		}
-		if (!monster.isAlive()) {
-			board.aliveMonsters.remove(monster);
-			board.deadMonsters.add(monster);
-			board.getBoard()[monster.current_row][monster.current_col].removePiece(MONSTER_PIECE);
-		}
 	}
 
 	/*
@@ -83,15 +78,15 @@ public class Fight implements Color, Vizualization, QuestDetails {
 			hero.getDefeatedMonstersFight().add(monster);
 			board.deadMonsters.add((Monster) monster);
 			board.aliveMonsters.remove(monster);
-			if (!board.aliveMonsters.isEmpty()) {
-				System.out.println(MONSTER + "\n" + DEFEATED);
-			}
+			board.getBoard()[monster.current_row][monster.current_col].removePiece(MONSTER_PIECE);
+			System.out.println(MONSTER + "\n" + DEFEATED);
 		}
 		hero.setHasDodgedAttack(false);
 		monster.setHasDodgedAttack(false);
 	}
 
 	public void heroAttacks(Hero hero, Monster monster) {
+		System.out.print(CYAN+"\nH"+playersQueue.getLast().getId() + " "+hero.getName() +", "+RESET);
 		hero.chooseCurrentAmmunition();
 		System.out.println("Your attack: " + hero.getCurrentAmmunition() + "\n" + hero.getCurrentAmmunition().image());
 		double damage = hero.damageCalculation(monster);
@@ -181,9 +176,10 @@ public class Fight implements Color, Vizualization, QuestDetails {
 		System.out.println("----------------------------------------------------------");
 		for(Player player : players) {
 			System.out.println(RED + "Player " + "H"+player.getId() + ":" + RESET);
-			System.out.println("Name: " + hero.getName() + "\nHp:" + (int) hero.getHp() + "nMana:" + hero.getMana());
+			System.out.println("Name: " + hero.getName() + "\nHp:  " + (int) hero.getHp() + "\nMana: " + hero.getMana());
 			System.out.println();
 		}
+
 		
 		System.out.println("----------------------------------------------------------");
 		System.out.println("Monsters Statistics:");
