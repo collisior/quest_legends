@@ -21,17 +21,20 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 	public TeamQuest team = new TeamQuest(1);
 
 	public void startGame() {
-		board = new QuestBoard(8, 8);
+		board = new QuestBoard(this, 8, 8);
 //		SetupQuestHandler.setupTeam(this);
+		System.out.println("000");
 		SetupQuestHandler.quickSetupTeam(this);
-
+		System.out.println("111");
 		board.spreadPlayers(team);
 
 		currentPlayer = team.getCurrentTeamPlayer();
 		boolean gameStop = false;
 		int monster_spawns = MONSTER_SPAWN_FREQUENCY; // number of rounds until next monsters spawn
 		board.spawnMonsters(team);
-		board.displayBoard(this);
+		System.out.println("222" + board.getRandomCell());
+		board.display.showBoard();
+		System.out.println("333");
 		while (!gameStop) {
 
 			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
@@ -108,12 +111,11 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 				printInfo();
 				break;
 			case 'M': // show map
-				board.displayBoard(this);
+				board.display.showBoard();
 				break;
 			case 'Q': // quit
 				quitGame();
 			}
-			board.cellTypeHandler(currentPlayer);
 		}
 	}
 

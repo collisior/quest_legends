@@ -1,7 +1,6 @@
 package quest_legends.GameBoard;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import quest_legends.Fight;
 import quest_legends.Game;
 import quest_legends.Player;
@@ -21,21 +20,28 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 	public ArrayList<Monster> aliveMonsters = new ArrayList<Monster>();
 	public ArrayList<Monster> deadMonsters = new ArrayList<Monster>();
-
 	/*
 	 * Constructor to initialize Quest board (dimensions retrieved from user)
 	 */
-	public QuestBoard() {
-		super();
+	public QuestBoard(Quest quest) {
+		super(quest);
+		setDisplay(quest);
 		spreadCells();
 		putMonstersTest(); // TODO: change to random generating monsters
+	}
+
+	@Override
+	public void setDisplay(Game game) {
+		this.display = new DisplayBoardQuest(this, (Quest) game);
+		System.out.println("Display Board created 00");
 	}
 
 	/*
 	 * Constructor to initialize fixed ROWxCOL board
 	 */
-	public QuestBoard(int x, int y) {
-		super(x, y);
+	public QuestBoard(Quest quest, int x, int y) {
+		super(quest, x, y);
+		setDisplay(quest);
 		spreadCells();
 	}
 
@@ -83,6 +89,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		this.getBoard()[player.current_row][player.current_col].removePiece(player.getPiece());
 		board[row][col].placePiece(player.getPiece());
 		player.updatePosition(row, col);
+		boostSkills((Hero) player.getHero());	
 	}
 
 	/*
@@ -101,19 +108,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	public void moveAllMonsters() {
 		for (Monster monster : aliveMonsters) {
 			moveForward(monster);
-		}
-	}
-
-	/*
-	 * Current cell further actions.
-	 */
-	public void cellTypeHandler(Player player) {
-		Cell cell = board[player.current_row][player.current_col];
-
-		if (cell.pieceExists(MONSTER_PIECE)) { // This cell contains monster -> start fight
-			// TODO: fight with monster
-		} else {
-			CellType.boostSkills(this, (Hero) player.getHero());
 		}
 	}
 
@@ -231,11 +225,10 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 					if ((c + 1) % 3 == 0) {
 						board[r][c].setType(BLOCKED);
 					}
-
 				}
 			} else {
 				for (int c = 0; c < cols; c++) {
-					board[r][c].setType(CellType.getRandomCell());
+					board[r][c].setType(getRandomCell());
 					if ((c + 1) % 3 == 0) {
 						board[r][c].setType(BLOCKED);
 					}
@@ -244,14 +237,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		}
 	}
 
-	/*
-	 * Generate random piece, return this piece.
-	 */
-	public void displayBoard(Game game) {
-		if (game instanceof Quest) {
-			DisplayBoard.showQuestBoard((Quest) game, this);
-		}
-	}
+
 
 	/*
 	 * Spread p;ayers on their Nexus area.
@@ -289,5 +275,38 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			aliveMonsters.add(monster);
 		}
 	}
+	
+	/*
+	 * Generate random cell type, return this type.
+	 */
+	public String getRandomCell() {
+		double x = Math.random();
+		if (x < 0.2) {
+			return PLAIN; 
+		} else if (x < 0.4) {
+			return BUSH; 
+		} else if (x < 0.6) {
+			return KOULOU; 
+		} else {
+			return CAVE;
+		}
+	}
+	
+	/*
+	 * Handle cell type (boost hero's skills)
+	 */
+	public void boostSkills(Hero hero) {
+		
+		if (getBoard()[hero.current_row][hero.current_col].getType() == BUSH) {
+			hero.setDexterity(hero.getDexterity()*1.15);
+		} else if (getBoard()[hero.current_row][hero.current_col].getType() == KOULOU) {
+			hero.setStrength(hero.getStrength()*1.15);
+		} else if (getBoard()[hero.current_row][hero.current_col].getType() == CAVE) {
+			hero.setAgility(hero.getAgility()*1.15);
+		} else {
+			
+		}
+	}
+
 
 }

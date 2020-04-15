@@ -1,5 +1,6 @@
 package quest_legends.GameBoard;
 
+import quest_legends.Game;
 import quest_legends.Helpers.InputHandler;
 
 /*
@@ -11,20 +12,27 @@ public abstract class Board {
 	public int rows;
 	public int cols;
 	final static int MAX_BOARD_SIDE_DIMENSION = 100;
+	public Game game = null;
+	public DisplayBoard display = null;
+
 	/*
 	 * Constructor to initialize empty board (dimensions retrieved from user)
 	 */
-	public Board() {
+	public Board(Game game) {
 		int[] row_col = getBoardDimensionFromUser();
+		this.game = game;
+		setDisplay(game);
 		setRows(row_col[0]);
 		setCols(row_col[1]);
 		setBoard(new Cell[rows][cols]);
 	}
+	
+	public abstract void setDisplay(Game game);
 
 	/*
 	 * Constructor to initialize empty board (dimensions are fixed from game)
 	 */
-	public Board(int rows, int cols) {
+	public Board(Game game, int rows, int cols) {
 		setRows(rows);
 		setCols(cols);
 		setBoard(new Cell[rows][cols]);
@@ -48,30 +56,35 @@ public abstract class Board {
 			}
 		}
 	}
+
 	/*
 	 * Set board rows dimension.
 	 */
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
+
 	/*
 	 * Set board columns dimension.
 	 */
 	public void setCols(int cols) {
 		this.cols = cols;
 	}
+
 	/*
 	 * Return maximum possible board side dimension
 	 */
 	public int getBoardLimit() {
 		return MAX_BOARD_SIDE_DIMENSION;
 	}
+
 	/*
 	 * Return board side dimensions (rows, columns)
 	 */
 	public int[] getBoardDimensions() {
 		return new int[] { rows, cols };
 	}
+
 	/*
 	 * Return this board number of rows
 	 */
@@ -85,6 +98,7 @@ public abstract class Board {
 	public int getBoardCols() {
 		return cols;
 	}
+
 	/*
 	 * Return this board's larger side dimension
 	 */
@@ -94,6 +108,7 @@ public abstract class Board {
 		}
 		return rows;
 	}
+
 	/*
 	 * Return this board's smaller side dimension
 	 */
@@ -103,12 +118,14 @@ public abstract class Board {
 		}
 		return rows;
 	}
+
 	/*
 	 * Return this board number of cells
 	 */
 	public int getNumberCells() {
 		return rows * cols;
 	}
+
 	/*
 	 * Return true if this board has empty cell(s)
 	 */
@@ -127,7 +144,7 @@ public abstract class Board {
 	 * Return true if board position is in this Board's range.
 	 */
 	public boolean boardPositionExists(int row, int col) {
-		
+
 		if ((row < 0) || (row > (rows - 1))) {
 			return false;
 		}
@@ -157,32 +174,33 @@ public abstract class Board {
 			} else {
 				System.out.printf(
 						"\nGiven (%d, %d) cell position is out of range!"
-						+ "\nTry different position in range rows: [1, %d] and cols: [1, %d].\n",
+								+ "\nTry different position in range rows: [1, %d] and cols: [1, %d].\n",
 						row_col[0], row_col[1], rows, cols);
 			}
 		}
 		return row_col;
 	}
-	 /* 
-	  * Retrieve board dimensions, and handle invalid inputs until valid inputs.
-	  */
+
+	/*
+	 * Retrieve board dimensions, and handle invalid inputs until valid inputs.
+	 */
 	public int[] getBoardDimensionFromUser() {
 		int[] row_col = new int[] { -1, -1 };
-		System.out.printf("Enter board dimensions. Possible dimension range [%d,%d].\n",3,MAX_BOARD_SIDE_DIMENSION);
-		System.out.printf("You will need enourmous display to play with sides more than %d cells...\n", MAX_BOARD_SIDE_DIMENSION);
+		System.out.printf("Enter board dimensions. Possible dimension range [%d,%d].\n", 3, MAX_BOARD_SIDE_DIMENSION);
+		System.out.printf("You will need enourmous display to play with sides more than %d cells...\n",
+				MAX_BOARD_SIDE_DIMENSION);
 		boolean playerInputIsValid = false;
 
 		while (playerInputIsValid == false) {
 
 			row_col = InputHandler.getTwoIntegers();
 
-			if ((row_col[0] <= MAX_BOARD_SIDE_DIMENSION) && (row_col[1] <= MAX_BOARD_SIDE_DIMENSION ) 
-					&& (row_col[0] > 2) && (row_col[1] > 2 )) {
+			if ((row_col[0] <= MAX_BOARD_SIDE_DIMENSION) && (row_col[1] <= MAX_BOARD_SIDE_DIMENSION) && (row_col[0] > 2)
+					&& (row_col[1] > 2)) {
 				playerInputIsValid = true;
 			} else {
-				System.out.printf(
-						"\nGiven (%d, %d) cell position is out of range!",
-						row_col[0], row_col[1], rows, cols);
+				System.out.printf("\nGiven (%d, %d) cell position is out of range!", row_col[0], row_col[1], rows,
+						cols);
 			}
 		}
 		return row_col;
@@ -192,19 +210,7 @@ public abstract class Board {
 	 * Print current game-board.
 	 */
 	public void displayBoard() {
-		String frame = "";
-		for (int n = 0; n < cols; n++) {
-			frame += "+--";
-		}
-		frame += "+\n";
-		String b = "";
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				b += "|" + getBoard()[i][j] + " ";
-			}
-			b += "|\n" + frame;
-		}
-		System.out.println(frame + b);
+		display.showBoard();
 	}
 
 	/*
