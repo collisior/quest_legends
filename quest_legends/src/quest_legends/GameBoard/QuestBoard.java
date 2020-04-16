@@ -97,7 +97,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		player.updatePosition(row, col);
 		boostSkills((Hero) player.getHero());
 		if (comingFight(player)) {
-			System.out.println(CYAN + player + ", get ready for the fight!" + RESET);
+			System.out.println(CYAN + player + ", get ready for the fight!\n" + RESET);
 		}
 	}
 
@@ -110,6 +110,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		}
 		if (isBehindHero(monster.current_row + 1, monster.current_col)) {
 			// stay at the same position. Can't pass behind alive hero.
+			
 			
 		} else {
 			board[monster.current_row][monster.current_col].removePiece(MONSTER_PIECE);

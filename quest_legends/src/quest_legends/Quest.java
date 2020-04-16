@@ -144,7 +144,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 
 		boolean playerMoved = false;
 		while (!playerMoved) {
-			System.out.println(GREEN + currentPlayer + RESET + ", choose your move:\n" + AcceptedMoveInputsInfo);
+			System.out.println("\n"+GREEN + currentPlayer + RESET + ", choose your move:\n" + AcceptedMoveInputsInfo);
 			char input = Character.toUpperCase(InputHandler.getCharacter(AcceptedMoveInputs));
 			switch (input) {
 			case 'W':
