@@ -105,7 +105,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 * Move monster's mark one cell further towards Hero's Nexus.
 	 */
 	public void moveForward(Monster monster) {
-		if(monster.current_row + 1 <= rows) {
+		if(monster.current_row + 1 >= rows) {
 			return;
 		}
 		if (isBehindHero(monster.current_row + 1, monster.current_col)) {
@@ -113,8 +113,9 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 			
 		} else {
 			board[monster.current_row][monster.current_col].removePiece(MONSTER_PIECE);
-			board[monster.current_row + 1][monster.current_col].placePiece(MONSTER_PIECE);
 			monster.updatePosition(monster.current_row + 1, monster.current_col);
+			board[monster.current_row][monster.current_col].placePiece(MONSTER_PIECE);
+			
 		}
 	}
 

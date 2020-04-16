@@ -39,7 +39,6 @@ public class DisplayBoardQuest extends DisplayBoard implements Color, CellType, 
 		frame += "+-+\n";
 		String b = "";
 		String tmp = "";
-
 		for (int i = 0; i < rows; i++) {
 			b += "  ";
 			for (int j = 0; j < cols; j++) {
@@ -105,8 +104,8 @@ public class DisplayBoardQuest extends DisplayBoard implements Color, CellType, 
 
 			}
 			b += ll + "\n   " + frame + "   " + frame;
-			System.out.print("\n ");
 		}
+		
 		System.out.println(indexes + "   " + frame + "   " + frame + b + " " + indexes);
 	}
 
