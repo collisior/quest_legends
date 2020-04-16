@@ -7,7 +7,7 @@ import quest_legends.Helpers.Color;
 public abstract class QuestCharacter implements Color, CellType, DodgeAttack, Damage {
 	protected String name;
 	protected double hp;
-	protected int level;
+	protected int level = 1;
 	protected boolean dodgedAttack = false;
 	protected String color = GREEN;
 	public int current_row = -1, current_col = -1;
@@ -32,11 +32,15 @@ public abstract class QuestCharacter implements Color, CellType, DodgeAttack, Da
 	}
 
 	public void setHp(double hp) {
-		if(hp < 0) {
+		if(hp <= 0) {
 			this.hp = 0;
 		}
 		else {
-			this.hp = hp;
+			if(hp > level*100) {
+				resetHp();
+			} else {
+				this.hp = hp;
+			}
 		}
 	}
 
@@ -97,7 +101,7 @@ public abstract class QuestCharacter implements Color, CellType, DodgeAttack, Da
 		return false;
 	}
 
-	public void applyDamage(double damage) {	
+	public void applyDamage(double damage) {
 		setHp(getHp() - damage);
 	}
 
@@ -105,8 +109,10 @@ public abstract class QuestCharacter implements Color, CellType, DodgeAttack, Da
 
 	protected abstract void levelUp();
 	
-
 	public abstract void information();
+	
 	public abstract String image() ;
+
+	public abstract void reset();
 
 }

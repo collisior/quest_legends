@@ -194,11 +194,7 @@ public class Hero extends QuestCharacter implements Storage {
 	 */
 	public void endOfRound() {
 		if (isAlive()) {
-			if (getHp() + getHp() * 0.05 > getLevel() * 100) {
-				setHp(getLevel() * 100);
-			} else {
-				setHp(getHp() + getHp() * 0.05);
-			}
+			setHp(getHp() + getHp() * 0.05);
 			setMana(getMana() + getMana() * 0.05);
 		}
 	}
@@ -316,6 +312,19 @@ public class Hero extends QuestCharacter implements Storage {
 
 	public String image() {
 		return null;
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		if (this instanceof Warrior) {
+			
+		} else if (this instanceof Paladin) {
+			
+		} else if (this instanceof Sorcerer) {
+			
+		}
+		
 	}
 
 }

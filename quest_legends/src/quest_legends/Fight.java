@@ -64,7 +64,8 @@ public class Fight implements Color, Vizualization, QuestDetails {
 	}
 
 	/*
-	 * Fight round: 1) Hero makes one attack, 2) Monster makes one attack. Round Ends.
+	 * Fight round: 1) Hero makes one attack, 2) Monster makes one attack. Round
+	 * Ends.
 	 */
 	private void round(Hero hero) {
 		System.out.println(hero.image());
@@ -86,7 +87,7 @@ public class Fight implements Color, Vizualization, QuestDetails {
 	}
 
 	public void heroAttacks(Hero hero, Monster monster) {
-		System.out.print(CYAN+"\nH"+playersQueue.getLast().getId() + " "+hero.getName() +", "+RESET);
+		System.out.print(CYAN + "\nH" + playersQueue.getLast().getId() + " " + hero.getName() + ", " + RESET);
 		hero.chooseCurrentAmmunition();
 		System.out.println("Your attack: " + hero.getCurrentAmmunition() + "\n" + hero.getCurrentAmmunition().image());
 		double damage = hero.damageCalculation(monster);
@@ -149,6 +150,7 @@ public class Fight implements Color, Vizualization, QuestDetails {
 	 * Return total HP for this team.
 	 */
 	public int totalPlayersHpValue() {
+
 		int totalHp = 0;
 		for (Player player : players) {
 			totalHp += player.getHero().getHp();
@@ -171,20 +173,21 @@ public class Fight implements Color, Vizualization, QuestDetails {
 
 	// print statistic of heros and monsters
 	public void printStatistics(Hero hero) {
+
 		System.out.println("----------------------------------------------------------");
 		System.out.println("Heroes Statistics:");
 		System.out.println("----------------------------------------------------------");
-		for(Player player : players) {
-			System.out.println(RED + "Player " + "H"+player.getId() + ":" + RESET);
-			System.out.println("Name: " + hero.getName() + "\nHp:    " + (int) hero.getHp() + "\nMana: " + hero.getMana());
+		for (Player player : players) {
+			System.out.println(RED + "Player " + "H" + player.getId() + ":" + RESET);
+			System.out.println("Name: " + player.getHero().getName() + "\nHp:    " + (int) player.getHero().getHp()
+					+ "\nMana: " + ((Hero) player.getHero()).getMana());
 			System.out.println();
 		}
 
-		
 		System.out.println("----------------------------------------------------------");
 		System.out.println("Monsters Statistics:");
 		System.out.println("----------------------------------------------------------");
-		System.out.println(RED+"Monster " + "M" + monster.id + ":"+RESET);
+		System.out.println(RED + "Monster " + "M" + monster.id + ":" + RESET);
 		System.out.println(monster.displayDetails());
 		System.out.println("----------------------------------------------------------");
 	}

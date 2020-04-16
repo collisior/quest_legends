@@ -144,13 +144,13 @@ public abstract class Board {
 	 * Return true if board position is in this Board's range.
 	 */
 	public boolean boardPositionExists(int row, int col) {
-
 		if ((row < 0) || (row > (rows - 1))) {
 			return false;
 		}
 		if ((col < 0) || (col > (cols - 1))) {
 			return false;
 		}
+		System.out.print("\n FALSE ");
 		return true;
 	}
 

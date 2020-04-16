@@ -64,8 +64,9 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	}
 
 	public boolean isValidMove(Player player, int row, int col) {
-
 		if (boardPositionExists(row, col)) {
+			System.out.println("Monster is here: "+this.getBoard()[row][col].pieceExists(MONSTER_PIECE));
+
 			if (this.getBoard()[row][col].getType() == BLOCKED) {
 				System.out.println(BLOCKED_CELL_MESSAGE);
 				return false;
@@ -324,7 +325,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 * Handle cell type (boost hero's skills)
 	 */
 	public void boostSkills(Hero hero) {
-
 		if (getBoard()[hero.current_row][hero.current_col].getType() == BUSH) {
 			hero.setDexterity(hero.getDexterity() * 1.15);
 		} else if (getBoard()[hero.current_row][hero.current_col].getType() == KOULOU) {
@@ -335,5 +335,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 		}
 	}
+
 
 }
