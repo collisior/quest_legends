@@ -35,21 +35,22 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 		board.spawnMonsters(team);
 		board.display.showBoard();
 		while (!gameStop) {
-
 			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
 				currentPlayer = team.getNextTeamPlayer();
 				makeMove();
 				if (questEnd()) {
 					gameStop = true;
 					board.display.showBoard();
+					break;
 				}
 			}
 
 			board.moveAllMonsters();
 			for (Monster monster : board.aliveMonsters) {
 				gameStop = monstersWin(monster);
-				if (gameStop)
+				if (gameStop) {
 					break;
+				}
 			}
 
 			if (!gameStop) {
@@ -72,12 +73,16 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					}
 				}
 			}
-			monster_spawns--;
-			if (monster_spawns == 0) {
-				board.spawnMonsters(team);
-				monster_spawns = MONSTER_SPAWN_FREQUENCY;
+			
+			if (!gameStop) {
+				monster_spawns--;
+				if (monster_spawns == 0) {
+					board.spawnMonsters(team);
+					monster_spawns = MONSTER_SPAWN_FREQUENCY;
+				}
 			}
 		}
+		playAgain();
 	}
 
 	public void makeMove() {
@@ -161,8 +166,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 			player.getHero().information();
 			System.out.println("");
 		}
-		String s = "-----------TEAM OVERALL-------------\n" 
-				+ "\tTotal Monsters defeated: " + board.deadMonsters.size()
+		String s = "-----------TEAM OVERALL-------------\n" + "\tTotal Monsters defeated: " + board.deadMonsters.size()
 				+ "\n-------------------------------------\n";
 		System.out.println(s);
 	}
@@ -172,6 +176,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 			board.display.showBoard();
 			printInfo();
 			System.out.println(VICTORY);
+			playAgain();
 			return true;
 		}
 		return false;

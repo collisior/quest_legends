@@ -150,7 +150,6 @@ public abstract class Board {
 		if ((col < 0) || (col > (cols - 1))) {
 			return false;
 		}
-		System.out.print("\n FALSE ");
 		return true;
 	}
 

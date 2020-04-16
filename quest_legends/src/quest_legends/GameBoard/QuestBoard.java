@@ -65,8 +65,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 	public boolean isValidMove(Player player, int row, int col) {
 		if (boardPositionExists(row, col)) {
-			System.out.println("Monster is here: "+this.getBoard()[row][col].pieceExists(MONSTER_PIECE));
-
 			if (this.getBoard()[row][col].getType() == BLOCKED) {
 				System.out.println(BLOCKED_CELL_MESSAGE);
 				return false;
@@ -106,18 +104,17 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 	 * Move monster's mark one cell further towards Hero's Nexus.
 	 */
 	public void moveForward(Monster monster) {
-		if(monster.current_row + 1 >= rows) {
+		if (monster.current_row + 1 >= rows) {
 			return;
 		}
 		if (isBehindHero(monster.current_row + 1, monster.current_col)) {
 			// stay at the same position. Can't pass behind alive hero.
-			
-			
+
 		} else {
 			board[monster.current_row][monster.current_col].removePiece(MONSTER_PIECE);
 			monster.updatePosition(monster.current_row + 1, monster.current_col);
 			board[monster.current_row][monster.current_col].placePiece(MONSTER_PIECE);
-			
+
 		}
 	}
 
@@ -169,7 +166,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (Player player : tmpTeam) {
 			if ((player.current_row == monster.current_row) || (player.current_row == monster.current_row + 1)
-			|| (player.current_row == monster.current_row + 0)) { 
+					|| (player.current_row == monster.current_row + 0)) {
 				if (player.current_col == monster.current_col || player.current_col - 1 == monster.current_col
 						|| player.current_col + 1 == monster.current_col) {
 					players.add(player);
@@ -237,11 +234,13 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		if (row - 1 < 0 || col - 1 < 0 || col + 1 == cols || row == rows) {
 			return false;
 		}
-		if (this.getBoard()[row - 1][col].pieceExists(HERO_PIECE)) {
+		if ((this.getBoard()[row - 1][col].pieceExists(HERO_PIECE))
+				|| (this.getBoard()[row - 1][col + 1].pieceExists(HERO_PIECE))
+				|| (this.getBoard()[row - 1][col - 1].pieceExists(HERO_PIECE))) {
 			return true;
-		} else if (this.getBoard()[row - 1][col + 1].pieceExists(HERO_PIECE)) {
-			return true;
-		} else if (this.getBoard()[row - 1][col - 1].pieceExists(HERO_PIECE)) {
+		} else if ((this.getBoard()[row][col].pieceExists(HERO_PIECE))
+				|| (this.getBoard()[row][col + 1].pieceExists(HERO_PIECE))
+				|| (this.getBoard()[row][col - 1].pieceExists(HERO_PIECE))) {
 			return true;
 		} else {
 			return false;
@@ -335,6 +334,5 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 
 		}
 	}
-
 
 }
