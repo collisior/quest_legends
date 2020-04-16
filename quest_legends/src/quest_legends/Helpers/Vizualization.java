@@ -313,6 +313,7 @@ public interface Vizualization {
 				+ "\n\n ^adjacent row - column, diagonally apart, or in the same cell";
 		System.out.println(s + fightRadius);		
 	}
+	
 	public static void fightCountdown() {
 		Timer timer = new Timer();
 		int seconds = 3;
@@ -321,9 +322,9 @@ public interface Vizualization {
 
 			public void run() {
 				if (i == 0) {
-					System.out.println(FIGHT);
 				} else if (i == 1) {
 					System.out.println(ONE);
+					System.out.println("\n"+FIGHT);
 				} else if (i == 2) {
 					System.out.println(TWO);
 				} else if (i == 3) {
@@ -341,6 +342,7 @@ public interface Vizualization {
 		}
 		return;
 	}
+	
 	public static void countdown(int seconds) {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {

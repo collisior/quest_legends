@@ -34,7 +34,5 @@ public class Main implements Vizualization {
 //		game.board.displayBoard(game);
 		
 	}
-	
-	
 
 }

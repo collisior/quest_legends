@@ -194,7 +194,11 @@ public class Hero extends QuestCharacter implements Storage {
 	 */
 	public void endOfRound() {
 		if (isAlive()) {
-			setHp(getHp() + getHp() * 0.05);
+			if (getHp() + getHp() * 0.05 > getLevel() * 100) {
+				setHp(getLevel() * 100);
+			} else {
+				setHp(getHp() + getHp() * 0.05);
+			}
 			setMana(getMana() + getMana() * 0.05);
 		}
 	}

@@ -8,6 +8,7 @@ import quest_legends.Helpers.Color;
 import quest_legends.Helpers.InputHandler;
 import quest_legends.Helpers.QuestDetails;
 import quest_legends.Helpers.Vizualization;
+import quest_legends.QuestCharacters.Monster;
 
 /*
  * Rules for the game (flow)
@@ -46,6 +47,8 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 			
 			board.moveAllMonsters();
 			
+			
+			
 			if (!gameStop) {
 				// check monsters nearby. start fight if monsters are in fight radius
 				ArrayList<Fight> fights = board.getFights(team);
@@ -56,6 +59,13 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					System.out.println(RED + "Fight " + (fights.indexOf(fight)+1) + " starts..." + RESET);
 					fight.startFight();
 
+				}
+				for (Monster monster: board.aliveMonsters) {
+					board.moveForward(monster);
+					if(monster.current_row == board.rows-1) {
+						System.out.println(RED+MONSTERS+VICTORY+RESET);
+						gameStop = true;
+					}
 				}
 			}
 
@@ -106,8 +116,9 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 						+ "\n[N] - move from your most recent board position: (" + currentPlayer.current_row + ","
 						+ currentPlayer.current_col + ")");
 				if (InputHandler.YesOrNo()) {
-					currentPlayer.current_col = currentPlayer.getHero().getHomeLane() * 3;
-					currentPlayer.current_row = board.rows - 1;
+					board.getBoard()[currentPlayer.current_row][currentPlayer.current_col].removePiece(HERO_PIECE);
+					currentPlayer.updatePosition(board.rows - 1, currentPlayer.getHero().getHomeLane() * 3);
+					board.getBoard()[currentPlayer.current_row][currentPlayer.current_col].placePiece(HERO_PIECE);
 				}
 				break;
 			case 'I': // all team heroes information
