@@ -97,7 +97,7 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		player.updatePosition(row, col);
 		boostSkills((Hero) player.getHero());
 		if (comingFight(player)) {
-			System.out.println(CYAN + player + ", get ready for the fight!\n" + RESET);
+//			System.out.println(CYAN + player + ", get ready for the fight!\n" + RESET);
 		}
 	}
 

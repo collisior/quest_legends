@@ -35,6 +35,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 		board.spawnMonsters(team);
 		board.display.showBoard();
 		while (!gameStop) {
+
 			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
 				currentPlayer = team.getNextTeamPlayer();
 				makeMove();
@@ -43,8 +44,13 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					board.display.showBoard();
 				}
 			}
+
 			board.moveAllMonsters();
 			
+			if (monstersWin()) {
+				gameStop = true;
+			}
+			System.out.println("Total fights in this round = " );
 			if (!gameStop) {
 				// check monsters nearby. start fight if monsters are in fight radius
 				ArrayList<Fight> fights = board.getFights(team);
@@ -52,39 +58,34 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					board.display.showBoard();
 				System.out.println("Total fights in this round = " + fights.size());
 				for (Fight fight : fights) {
-					System.out.println(RED + "Fight " + (fights.indexOf(fight)+1) + " starts..." + RESET);
+					System.out.println(RED + "Fight " + (fights.indexOf(fight) + 1) + " starts..." + RESET);
 					fight.startFight();
 
 				}
-				for (Monster monster: board.aliveMonsters) {
+				
+				for (Fight fight : fights) {
+					Monster monster = fight.monster;
 					board.moveForward(monster);
-					if(monster.current_row == board.rows-1) {
-						System.out.println(RED+MONSTERS+VICTORY+RESET);
+					if (monster.current_row == board.rows - 1) {
+						System.out.println(RED + MONSTERS + VICTORY + RESET);
 						gameStop = true;
 					}
 				}
 			}
-
 			monster_spawns--;
 			if (monster_spawns == 0) {
 				board.spawnMonsters(team);
 				monster_spawns = MONSTER_SPAWN_FREQUENCY;
 			}
 		}
-		System.out.println("Do you want to play again?");
-		if(InputHandler.YesOrNo()) {
-			continueGame();
-		} else {
-			System.out.println("Bye bye!");
-		}
+		playAgain();
 	}
-	
+
 	public void continueGame() {
 		System.out.println("Do you want to choose new heroes?");
-		if(InputHandler.YesOrNo()) {
+		if (InputHandler.YesOrNo()) {
 			startGame();
 		}
-		
 		InputHandler.pressAnything();
 		board.spreadPlayers(team);
 
@@ -94,7 +95,7 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 		board.spawnMonsters(team);
 		board.display.showBoard();
 		while (!gameStop) {
-			
+
 			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
 				currentPlayer = team.getNextTeamPlayer();
 				makeMove();
@@ -103,9 +104,13 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					board.display.showBoard();
 				}
 			}
-			
+
 			board.moveAllMonsters();
 			
+			if (monstersWin()) {
+				gameStop = true;
+			}
+			System.out.println("Total fights in this round = " );
 			if (!gameStop) {
 				// check monsters nearby. start fight if monsters are in fight radius
 				ArrayList<Fight> fights = board.getFights(team);
@@ -113,38 +118,34 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 					board.display.showBoard();
 				System.out.println("Total fights in this round = " + fights.size());
 				for (Fight fight : fights) {
-					System.out.println(RED + "Fight " + (fights.indexOf(fight)+1) + " starts..." + RESET);
+					System.out.println(RED + "Fight " + (fights.indexOf(fight) + 1) + " starts..." + RESET);
 					fight.startFight();
 
 				}
-				for (Monster monster: board.aliveMonsters) {
+				
+				for (Fight fight : fights) {
+					Monster monster = fight.monster;
 					board.moveForward(monster);
-					if(monster.current_row == board.rows-1) {
-						System.out.println(RED+MONSTERS+VICTORY+RESET);
+					if (monster.current_row == board.rows - 1) {
+						System.out.println(RED + MONSTERS + VICTORY + RESET);
 						gameStop = true;
 					}
 				}
 			}
-
 			monster_spawns--;
 			if (monster_spawns == 0) {
 				board.spawnMonsters(team);
 				monster_spawns = MONSTER_SPAWN_FREQUENCY;
 			}
 		}
-		System.out.println("Do you want to play again?");
-		if(InputHandler.YesOrNo()) {
-			continueGame();
-		} else {
-			System.out.println("Bye bye!");
-		}
+		playAgain();
 	}
 
 	public void makeMove() {
 
 		boolean playerMoved = false;
 		while (!playerMoved) {
-			System.out.println("\n"+GREEN + currentPlayer + RESET + ", choose your move:\n" + AcceptedMoveInputsInfo);
+			System.out.println("\n" + GREEN + currentPlayer + RESET + ", choose your move:\n" + AcceptedMoveInputsInfo);
 			char input = Character.toUpperCase(InputHandler.getCharacter(AcceptedMoveInputs));
 			switch (input) {
 			case 'W':
@@ -194,6 +195,25 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 				quitGame();
 			}
 		}
+	}
+
+	public void playAgain() {
+		System.out.println("Do you want to play again?");
+		if (InputHandler.YesOrNo()) {
+			continueGame();
+		} else {
+			System.out.println("Bye bye!");
+		}
+	}
+
+	public boolean monstersWin() {
+		for (Monster monster : board.aliveMonsters) {
+			if (monster.current_row == board.rows - 1) {
+				System.out.println(RED + MONSTERS + VICTORY + RESET);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void printInfo() {
