@@ -32,6 +32,16 @@ public class SetupQuestHandler implements QuestDetails, Color {
 		quest.team.shuffleTurns();
 	}
 	
+	public static void setupExistingTeam(Team team) {
+		for (Player player: team.getTeam()) {
+			Hero hero = (Hero) chooseQuestHero(player);
+			player.setHero(hero);
+			System.out.println(RED + player + " your Hero is " + player.getHero() + RESET);
+		}
+
+		team.shuffleTurns();
+	}
+	
 	public static void quickSetupTeam(Quest quest) {
 //		System.out.printf(
 //				"\nHow many players will be playing in your team? \nMax number of players in one team is %d. \n",

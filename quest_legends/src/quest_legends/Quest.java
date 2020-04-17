@@ -21,12 +21,13 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 	public TeamQuest team = new TeamQuest(1);
 
 	public void startGame() {
+		
 		board = new QuestBoard(this, 8, 8);
 		System.out.println(BOARD_CELLS_INFO);
 		System.out.println(FIGHT_RADIUS_INFO);
 		InputHandler.pressAnything();
-//		SetupQuestHandler.setupTeam(this);
-		SetupQuestHandler.quickSetupTeam(this);
+		SetupQuestHandler.setupTeam(this);
+//		SetupQuestHandler.quickSetupTeam(this);
 		board.spreadPlayers(team);
 
 		currentPlayer = team.getCurrentTeamPlayer();
@@ -40,25 +41,23 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 				makeMove();
 				if (questEnd()) {
 					gameStop = true;
-					board.display.showBoard();
 					break;
 				}
 			}
-
-			board.moveAllMonsters();
-			for (Monster monster : board.aliveMonsters) {
-				gameStop = monstersWin(monster);
-				if (gameStop) {
-					break;
-				}
-			}
-
+			
 			if (!gameStop) {
+				board.moveAllMonsters();
+				for (Monster monster : board.aliveMonsters) {
+					gameStop = monstersWin(monster);
+					if (gameStop) {
+						break;
+					}
+				}
 				// check monsters nearby. start fight if monsters are in fight radius
 				ArrayList<Fight> fights = board.getFights(team);
 				if (!fights.isEmpty())
 					board.display.showBoard();
-				System.out.println("Total fights in this round = " + fights.size());
+				System.out.println("\nTotal fights in this round = " + fights.size()+"\n");
 				for (Fight fight : fights) {
 					System.out.println(RED + "Fight " + (fights.indexOf(fight) + 1) + " starts..." + RESET);
 					fight.startFight();
@@ -72,9 +71,6 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 						gameStop = monstersWin(monster);
 					}
 				}
-			}
-			
-			if (!gameStop) {
 				monster_spawns--;
 				if (monster_spawns == 0) {
 					board.spawnMonsters(team);
@@ -144,9 +140,9 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 	public void playAgain() {
 		System.out.println("Do you want to play again?");
 		if (InputHandler.YesOrNo()) {
-			startGame();
+			continueGame();
 		} else {
-			System.out.println("Bye bye!");
+			quitGame();
 		}
 	}
 
@@ -176,10 +172,70 @@ public class Quest extends Game implements Color, Vizualization, QuestDetails {
 			board.display.showBoard();
 			printInfo();
 			System.out.println(VICTORY);
-			playAgain();
 			return true;
 		}
 		return false;
+	}
+	
+	private void continueGame() {
+
+		board = new QuestBoard(this, 8, 8);
+		System.out.println(BOARD_CELLS_INFO);
+		System.out.println(FIGHT_RADIUS_INFO);
+		InputHandler.pressAnything();
+		SetupQuestHandler.setupExistingTeam(team);
+//		SetupQuestHandler.quickSetupTeam(this);
+		board.spreadPlayers(team);
+
+		currentPlayer = team.getCurrentTeamPlayer();
+		boolean gameStop = false;
+		int monster_spawns = MONSTER_SPAWN_FREQUENCY; // number of rounds until next monsters spawn
+		board.spawnMonsters(team);
+		board.display.showBoard();
+		while (!gameStop) {
+			for (int i = 0; i < team.getTeamSize(); i++) { // finish all players moves
+				currentPlayer = team.getNextTeamPlayer();
+				makeMove();
+				if (questEnd()) {
+					gameStop = true;
+					break;
+				}
+			}
+			
+			if (!gameStop) {
+				board.moveAllMonsters();
+				for (Monster monster : board.aliveMonsters) {
+					gameStop = monstersWin(monster);
+					if (gameStop) {
+						break;
+					}
+				}
+				// check monsters nearby. start fight if monsters are in fight radius
+				ArrayList<Fight> fights = board.getFights(team);
+				if (!fights.isEmpty())
+					board.display.showBoard();
+				System.out.println("Total fights in this round = " + fights.size());
+				for (Fight fight : fights) {
+					System.out.println(RED + "Fight " + (fights.indexOf(fight) + 1) + " starts..." + RESET);
+					fight.startFight();
+////					System.out.println(RED + "...Fight " + (fights.indexOf(fight) + 1) + " ends" + RESET);		
+				}
+
+				for (Fight fight : fights) {
+					Monster monster = fight.monster;
+					if (board.aliveMonsters.contains(monster)) {
+						board.moveForward(monster);
+						gameStop = monstersWin(monster);
+					}
+				}
+				monster_spawns--;
+				if (monster_spawns == 0) {
+					board.spawnMonsters(team);
+					monster_spawns = MONSTER_SPAWN_FREQUENCY;
+				}
+			}
+		}
+		playAgain();
 	}
 
 }

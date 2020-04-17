@@ -10,11 +10,8 @@ import quest_legends.Helpers.Color;
 import quest_legends.Helpers.Generator;
 import quest_legends.Helpers.QuestDetails;
 import quest_legends.Helpers.Vizualization;
-import quest_legends.QuestCharacters.Dragon;
 import quest_legends.QuestCharacters.Hero;
 import quest_legends.QuestCharacters.Monster;
-import quest_legends.QuestCharacters.Spirit;
-import quest_legends.QuestCharacters.Exoskeleton;
 
 public class QuestBoard extends Board implements CellType, Color, Vizualization, QuestDetails {
 
@@ -28,7 +25,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		super(quest);
 		setDisplay(quest);
 		spreadCells();
-		putMonstersTest(); // TODO: change to random generating monsters
 	}
 
 	@Override
@@ -43,24 +39,6 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		super(quest, x, y);
 		setDisplay(quest);
 		spreadCells();
-	}
-
-	public void putMonstersTest() {
-		ArrayList<Monster> newMonsters = new ArrayList<Monster>();
-		Monster monster1 = new Dragon("Dragon", 3, 300, 400, 35);
-		Monster monster2 = new Spirit("Spirit", 3, 300, 400, 35);
-		Monster monster3 = new Exoskeleton("Exoskeleton", 3, 300, 400, 35);
-		newMonsters.add(monster1);
-		newMonsters.add(monster2);
-		newMonsters.add(monster3);
-		int Nexus_col = 0;
-		for (Monster monster : newMonsters) {
-			int random_col = Quest.random.nextInt(10) % 2 + Nexus_col;
-			monster.current_row = 0;
-			monster.current_col = random_col;
-			board[monster.current_row][monster.current_col].placePiece(MONSTER_PIECE);
-			Nexus_col += 3;
-		}
 	}
 
 	public boolean isValidMove(Player player, int row, int col) {
@@ -107,9 +85,8 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 		if (monster.current_row + 1 >= rows) {
 			return;
 		}
-		if (isBehindHero(monster.current_row + 1, monster.current_col)) {
+		if (isBehindHero(monster.current_row, monster.current_col)) {
 			// stay at the same position. Can't pass behind alive hero.
-
 		} else {
 			board[monster.current_row][monster.current_col].removePiece(MONSTER_PIECE);
 			monster.updatePosition(monster.current_row + 1, monster.current_col);
@@ -242,7 +219,11 @@ public class QuestBoard extends Board implements CellType, Color, Vizualization,
 				|| (this.getBoard()[row][col + 1].pieceExists(HERO_PIECE))
 				|| (this.getBoard()[row][col - 1].pieceExists(HERO_PIECE))) {
 			return true;
-		} else {
+		} else if ((this.getBoard()[row + 1][col].pieceExists(HERO_PIECE))
+				|| (this.getBoard()[row + 1][col + 1].pieceExists(HERO_PIECE))
+				|| (this.getBoard()[row + 1][col - 1].pieceExists(HERO_PIECE))) {
+			return true;
+		}  else {
 			return false;
 		}
 	}
